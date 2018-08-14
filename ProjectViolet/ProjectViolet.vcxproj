@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{EEFA84EE-85FE-484B-BDD4-0B943E9E5A54}</ProjectGuid>
+    <RootNamespace>ProjectMajestic</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\SFML-2.5.0-VS2017\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\SFML-2.5.0-VS2017\lib;$(LibraryPath)</LibraryPath>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\SFML-2.5.0-VS2017\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\SFML-2.5.0-VS2017\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\SFML-2.5.0-VS2017\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\SFML-2.5.0-VS2017\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\SFML-2.5.0-VS2017\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\SFML-2.5.0-VS2017\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAsManaged>false</CompileAsManaged>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <EnableModules>false</EnableModules>
+      <DisableLanguageExtensions>
+      </DisableLanguageExtensions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>flac.lib;freetype.lib;ogg.lib;openal32.lib;opengl32.lib;winmm.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;sfml-audio-d.lib;sfml-graphics-d.lib;sfml-main-d.lib;sfml-network-d.lib;sfml-system-d.lib;sfml-window-d.lib;vorbis.lib;vorbisenc.lib;vorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <LinkStatus>
+      </LinkStatus>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>flac.lib;freetype.lib;ogg.lib;openal32.lib;opengl32.lib;sfml-audio-d.lib;sfml-graphics-d.lib;sfml-main-d.lib;sfml-network-d.lib;sfml-system-d.lib;sfml-window-d.lib;vorbis.lib;vorbisenc.lib;vorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>SFML_STATIC;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <CompileAsManaged>false</CompileAsManaged>
+      <CompileAsWinRT>
+      </CompileAsWinRT>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableLanguageExtensions>
+      </DisableLanguageExtensions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>flac.lib;freetype.lib;ogg.lib;openal32.lib;opengl32.lib;winmm.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;sfml-audio-s.lib;sfml-graphics-s.lib;sfml-main.lib;sfml-network-s.lib;sfml-system-s.lib;sfml-window-s.lib;vorbis.lib;vorbisenc.lib;vorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SetChecksum>true</SetChecksum>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>flac.lib;freetype.lib;ogg.lib;openal32.lib;opengl32.lib;sfml-audio.lib;sfml-graphics.lib;sfml-main.lib;sfml-network.lib;sfml-system.lib;sfml-window.lib;vorbis.lib;vorbisenc.lib;vorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="App.hpp" />
+    <ClInclude Include="ArrowEntity.hpp" />
+    <ClInclude Include="ArrowEntity.Impl.hpp" />
+    <ClInclude Include="ArrowItem.hpp" />
+    <ClInclude Include="AssetManager.hpp" />
+    <ClInclude Include="AssetManager.Impl.hpp" />
+    <ClInclude Include="Barrett.hpp" />
+    <ClInclude Include="Bedrock.hpp" />
+    <ClInclude Include="Block.hpp" />
+    <ClInclude Include="Block.Impl.hpp" />
+    <ClInclude Include="BlockAllocator.hpp" />
+    <ClInclude Include="BlockAllocator.Impl.hpp" />
+    <ClInclude Include="BowItem.hpp" />
+    <ClInclude Include="BowItem.Impl.hpp" />
+    <ClInclude Include="BulletEntity.hpp" />
+    <ClInclude Include="BulletEntity.Impl.hpp" />
+    <ClInclude Include="Chest.hpp" />
+    <ClInclude Include="Chest.Impl.hpp" />
+    <ClInclude Include="ChestInventory.hpp" />
+    <ClInclude Include="ChestInventory.Impl.hpp" />
+    <ClInclude Include="Chunk.hpp" />
+    <ClInclude Include="Data.hpp" />
+    <ClInclude Include="EMX3.hpp" />
+    <ClInclude Include="Entity.hpp" />
+    <ClInclude Include="Entity.Impl.hpp" />
+    <ClInclude Include="EntityAllocator.hpp" />
+    <ClInclude Include="EntityAllocator.Impl.hpp" />
+    <ClInclude Include="EntityManager.hpp" />
+    <ClInclude Include="FallingSand.hpp" />
+    <ClInclude Include="FallingSand.Impl.hpp" />
+    <ClInclude Include="GamePausedUI.Impl.hpp" />
+    <ClInclude Include="GameScene.hpp" />
+    <ClInclude Include="Gravel.hpp" />
+    <ClInclude Include="Gravel.Impl.hpp" />
+    <ClInclude Include="GrenadeEntity.hpp" />
+    <ClInclude Include="GrenadeEntity.Impl.hpp" />
+    <ClInclude Include="GrenadeItem.hpp" />
+    <ClInclude Include="GrenadeItem.Impl.hpp" />
+    <ClInclude Include="GunItem.hpp" />
+    <ClInclude Include="GunItem.Impl.hpp" />
+    <ClInclude Include="ImGui\imconfig-SFML.h" />
+    <ClInclude Include="ImGui\imconfig.h" />
+    <ClInclude Include="ImGui\imgui-setup.h" />
+    <ClInclude Include="ImGui\imgui-SFML.h" />
+    <ClInclude Include="ImGui\imgui.h" />
+    <ClInclude Include="ImGui\imgui_internal.h" />
+    <ClInclude Include="ImGui\stb_rect_pack.h" />
+    <ClInclude Include="ImGui\stb_textedit.h" />
+    <ClInclude Include="ImGui\stb_truetype.h" />
+    <ClInclude Include="ImplList.hpp" />
+    <ClInclude Include="InGameUI.hpp" />
+    <ClInclude Include="InGameUI.Impl.hpp" />
+    <ClInclude Include="Item.hpp" />
+    <ClInclude Include="Item.Impl.hpp" />
+    <ClInclude Include="ItemAllocator.hpp" />
+    <ClInclude Include="ItemAllocator.Impl.hpp" />
+    <ClInclude Include="ItemEntity.hpp" />
+    <ClInclude Include="ItemEntity.Impl.hpp" />
+    <ClInclude Include="Ladder.hpp" />
+    <ClInclude Include="LaserBullet.hpp" />
+    <ClInclude Include="LaserBullet.Impl.hpp" />
+    <ClInclude Include="Lockable.hpp" />
+    <ClInclude Include="LogBlock.hpp" />
+    <ClInclude Include="LogSystem.hpp" />
+    <ClInclude Include="M16A4.hpp" />
+    <ClInclude Include="Main.hpp" />
+    <ClInclude Include="MinigunItem.hpp" />
+    <ClInclude Include="Mob.hpp" />
+    <ClInclude Include="Mob.Impl.hpp" />
+    <ClInclude Include="MRM36.hpp" />
+    <ClInclude Include="MRM36.Impl.hpp" />
+    <ClInclude Include="NovelGameSystem.hpp" />
+    <ClInclude Include="NovelGameSystem.Impl.hpp" />
+    <ClInclude Include="OptionFile.hpp" />
+    <ClInclude Include="IO.hpp" />
+    <ClInclude Include="OptionFileAdv.hpp" />
+    <ClInclude Include="ParticleSystem.hpp" />
+    <ClInclude Include="ParticleSystem.Impl.hpp" />
+    <ClInclude Include="GamePausedUI.hpp" />
+    <ClInclude Include="PerlinNoise.hpp" />
+    <ClInclude Include="PerlinNoise.Impl.hpp" />
+    <ClInclude Include="Planks.hpp" />
+    <ClInclude Include="PlayerEntity.hpp" />
+    <ClInclude Include="PlayerEntity.Impl.hpp" />
+    <ClInclude Include="PlayerInventory.hpp" />
+    <ClInclude Include="PlayerInventory.Impl.hpp" />
+    <ClInclude Include="RpgEntity.hpp" />
+    <ClInclude Include="RpgEntity.Impl.hpp" />
+    <ClInclude Include="RpgLauncherItem.hpp" />
+    <ClInclude Include="RpgLauncherItem.Impl.hpp" />
+    <ClInclude Include="Scene.hpp" />
+    <ClInclude Include="SG55.hpp" />
+    <ClInclude Include="SG55.Impl.hpp" />
+    <ClInclude Include="Stone.hpp" />
+    <ClInclude Include="StringParser.hpp" />
+    <ClInclude Include="TerrainManager.hpp" />
+    <ClInclude Include="TerrainGenerator.hpp" />
+    <ClInclude Include="TerrainGenerator.Impl.hpp" />
+    <ClInclude Include="TestEntity.hpp" />
+    <ClInclude Include="TestScene.hpp" />
+    <ClInclude Include="TextSystem.hpp" />
+    <ClInclude Include="TextureManager.hpp" />
+    <ClInclude Include="ThreadPool.hpp" />
+    <ClInclude Include="Torch.hpp" />
+    <ClInclude Include="Uuid.hpp" />
+    <ClInclude Include="VTX65.hpp" />
+    <ClInclude Include="VTX65.Impl.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.Impl.hpp" />
+    <ClInclude Include="Chunk.Impl.hpp" />
+    <ClInclude Include="EntityManager.Impl.hpp" />
+    <ClInclude Include="GameScene.Impl.hpp" />
+    <ClCompile Include="ImGui\imgui-SFML.cpp" />
+    <ClCompile Include="ImGui\imgui.cpp" />
+    <ClCompile Include="ImGui\imgui_demo.cpp" />
+    <ClCompile Include="ImGui\imgui_draw.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClInclude Include="TerrainManager.Impl.hpp" />
+    <ClInclude Include="TestScene.Impl.hpp" />
+    <ClInclude Include="TextureManager.Impl.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

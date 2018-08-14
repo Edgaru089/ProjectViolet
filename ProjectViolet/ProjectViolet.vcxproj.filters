@@ -1,0 +1,447 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Game">
+      <UniqueIdentifier>{16323a34-47f2-4e81-9ac5-2999caea1a92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Terrain">
+      <UniqueIdentifier>{7c03cfa5-5bdf-4d55-b8dd-45b1b7eb3d91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{112b8bed-5eb6-4005-b518-851937a91fc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\ImGui">
+      <UniqueIdentifier>{1d004b8e-f2e2-47e5-a8cd-29f1cda21d46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源代码文件">
+      <UniqueIdentifier>{476dcc2b-8bc9-4b6d-aef8-4ffa834d2f72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源代码文件\ImGui">
+      <UniqueIdentifier>{6a9de1cd-5c2f-42b5-b7d4-9cbfb8f0a401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{315d442c-b928-4478-a95a-a8a492efc407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{03923119-d2de-4b77-be81-558350c44c10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{7babbde5-528c-4369-942c-bcf743ff4634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{06dce042-6a6e-4fcd-8d00-b53d7e313b47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Asset">
+      <UniqueIdentifier>{9e4dc9e7-c3ff-4001-a5a1-71b444b8b7ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameGUI">
+      <UniqueIdentifier>{ff39fe47-7310-4592-bc72-2e6bb40e58e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items">
+      <UniqueIdentifier>{67f2533e-8b93-4299-a263-b7527dab989e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Entities">
+      <UniqueIdentifier>{3517f35e-f6b7-48b9-8fce-11078a11807e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Entities\Entities">
+      <UniqueIdentifier>{428b9564-b350-4bc5-8825-6ee5a7fbd1a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Entities\Base">
+      <UniqueIdentifier>{5434b1be-94d5-45b6-834a-e771c289392a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Blocks">
+      <UniqueIdentifier>{451b0078-97bd-41f4-a9c7-b3cc67144f6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Blocks\Base">
+      <UniqueIdentifier>{be02b152-898e-44f2-9043-c90e7ea7643b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks">
+      <UniqueIdentifier>{b240df63-c010-4905-bd15-7318ea45bcca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Items">
+      <UniqueIdentifier>{27b8d13c-6bb0-4e41-82d3-19f24061d548}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Items\Base">
+      <UniqueIdentifier>{307782a2-7b43-4ca7-8d00-85852d7bd7eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Items\Items">
+      <UniqueIdentifier>{91e61fdb-7e5b-4e96-aa79-cec88fad4c83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns">
+      <UniqueIdentifier>{b0339b29-9700-4f4d-8a81-7b021f29e3fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\KappaHeavyInc">
+      <UniqueIdentifier>{68df724a-48ca-40b4-a4da-f1e2abe0f023}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\Modern">
+      <UniqueIdentifier>{1236e03e-208a-44c1-b59f-4c511e7b4c42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameGUI\Base">
+      <UniqueIdentifier>{8fa7125d-3d0b-4731-9799-5dc3dc5c2cbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\NovelGame">
+      <UniqueIdentifier>{334f1567-6cdb-4cdc-a0d3-3c162ca75907}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>头文件\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imconfig-SFML.h">
+      <Filter>头文件\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>头文件\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>头文件\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui-setup.h">
+      <Filter>头文件\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui-SFML.h">
+      <Filter>头文件\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\stb_rect_pack.h">
+      <Filter>头文件\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\stb_textedit.h">
+      <Filter>头文件\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\stb_truetype.h">
+      <Filter>头文件\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionFile.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="LogSystem.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="StringParser.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.hpp">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ImplList.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Uuid.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="IO.hpp">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerEntity.hpp">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerEntity.Impl.hpp">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PerlinNoise.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="PerlinNoise.Impl.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionFileAdv.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.hpp">
+      <Filter>Game\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.Impl.hpp">
+      <Filter>Game\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.hpp">
+      <Filter>Game\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.Impl.hpp">
+      <Filter>Game\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.hpp">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.Impl.hpp">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.hpp">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.Impl.hpp">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="FallingSand.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="FallingSand.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemEntity.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemEntity.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="TestEntity.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Lockable.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInventory.hpp">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInventory.Impl.hpp">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockAllocator.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockAllocator.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemAllocator.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemAllocator.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrowEntity.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrowEntity.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ChestInventory.hpp">
+      <Filter>Game\GameGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ChestInventory.Impl.hpp">
+      <Filter>Game\GameGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityAllocator.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityAllocator.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadPool.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="App.hpp">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="App.Impl.hpp">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletEntity.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletEntity.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GrenadeEntity.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GrenadeEntity.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GunItem.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="GunItem.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="RpgEntity.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="RpgEntity.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="TextSystem.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="LaserBullet.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="LaserBullet.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="EMX3.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\KappaHeavyInc</Filter>
+    </ClInclude>
+    <ClInclude Include="VTX65.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\KappaHeavyInc</Filter>
+    </ClInclude>
+    <ClInclude Include="VTX65.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\KappaHeavyInc</Filter>
+    </ClInclude>
+    <ClInclude Include="MRM36.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\KappaHeavyInc</Filter>
+    </ClInclude>
+    <ClInclude Include="MRM36.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\KappaHeavyInc</Filter>
+    </ClInclude>
+    <ClInclude Include="SG55.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\KappaHeavyInc</Filter>
+    </ClInclude>
+    <ClInclude Include="SG55.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\KappaHeavyInc</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePausedUI.hpp">
+      <Filter>Game\GameGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePausedUI.Impl.hpp">
+      <Filter>Game\GameGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Mob.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Mob.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Data.hpp">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrowItem.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="BowItem.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="BowItem.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="GrenadeItem.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="GrenadeItem.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Barrett.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\Modern</Filter>
+    </ClInclude>
+    <ClInclude Include="M16A4.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\Modern</Filter>
+    </ClInclude>
+    <ClInclude Include="MinigunItem.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\Modern</Filter>
+    </ClInclude>
+    <ClInclude Include="RpgLauncherItem.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\Modern</Filter>
+    </ClInclude>
+    <ClInclude Include="RpgLauncherItem.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\Modern</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.hpp">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.Impl.hpp">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameUI.hpp">
+      <Filter>Game\GameGUI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameUI.Impl.hpp">
+      <Filter>Game\GameGUI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Bedrock.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Chest.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Chest.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Gravel.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Gravel.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="LogBlock.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Planks.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Stone.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Torch.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainGenerator.hpp">
+      <Filter>Game\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainGenerator.Impl.hpp">
+      <Filter>Game\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Chunk.hpp">
+      <Filter>Game\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Chunk.Impl.hpp">
+      <Filter>Game\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainManager.hpp">
+      <Filter>Game\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainManager.Impl.hpp">
+      <Filter>Game\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="NovelGameSystem.hpp">
+      <Filter>Game\NovelGame</Filter>
+    </ClInclude>
+    <ClInclude Include="NovelGameSystem.Impl.hpp">
+      <Filter>Game\NovelGame</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>源代码文件\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>源代码文件\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>源代码文件\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui-SFML.cpp">
+      <Filter>源代码文件\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>源代码文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
