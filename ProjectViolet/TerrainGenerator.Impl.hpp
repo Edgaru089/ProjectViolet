@@ -115,7 +115,8 @@ void TerrainGenerator::setup(Vector2u chunkCount, int spawnCount) {
 		terrainManager.setBlock(Vector2i(x + 7, y + 1), "planks");
 
 		// Torch
-		terrainManager.placeBlock(Vector2i(x + 1, y - 1), "torch");
+		terrainManager.setBlock(Vector2i(x + 1, y - 1), "torch");
+		terrainManager.requestLightingUpdate();
 
 		// Chest
 		terrainManager.setBlock(Vector2i(x + 2, y), "chest");

@@ -64,7 +64,7 @@ void Entity::_moveX(double amount) {
 
 			if (b != nullptr && b->getHitbox().contains(ix)) {
 				if (b->isSolid()) {
-					ix.x = b->getHitbox().left - 1e-7; //HACK Minus EPS to avoid being treated as stuck in walls
+					ix.x = b->getHitbox().left - 1e-6; //HACK Minus EPS to avoid being treated as stuck in walls
 					isHit = true;
 					//mlog << "[Entity/Collision] [X-Positive] Hit: Entity {" << getUuid().toString() << "}" << dlog;
 					//mlog << "       Block: (" << blockCoord.x << ", " << blockCoord.y << "), Pos: (" << i.x << ", " << i.y << ") --> (" << ix.x << ", " << ix.y << ")" << dlog;
@@ -104,7 +104,7 @@ void Entity::_moveX(double amount) {
 			shared_ptr<Block> b = terrainManager.getBlock(blockCoord);
 			if (b != nullptr && b->getHitbox().contains(ix)) {
 				if (b->isSolid()) {
-					ix.x = b->getHitbox().left + b->getHitbox().width + 1e-7;  //HACK Minus EPS to avoid being treated as stuck in walls
+					ix.x = b->getHitbox().left + b->getHitbox().width + 1e-6;  //HACK Minus EPS to avoid being treated as stuck in walls
 					isHit = true;
 					//mlog << "[Entity / Collision] [X-Negative] Hit: Entity {" << getUuid().toString() << "}" << dlog;
 					//mlog << "       Block: (" << blockCoord.x << ", " << blockCoord.y << "), Pos: (" << i.x << ", " << i.y << ") --> (" << ix.x << ", " << ix.y << ")" << dlog;
@@ -165,7 +165,7 @@ void Entity::_moveY(double amount) {
 			shared_ptr<Block> b = terrainManager.getBlock(blockCoord);
 			if (b != nullptr && b->getHitbox().contains(ix)) {
 				if (b->isSolid()) {
-					ix.y = b->getHitbox().top - 1e-7;  //HACK Minus EPS to avoid being treated as stuck in walls
+					ix.y = b->getHitbox().top - 1e-6;  //HACK Minus EPS to avoid being treated as stuck in walls
 					isHit = true;
 					//mlog << "[Entity / Collision] [Y-Positive] Hit: Entity {" << getUuid().toString() << "}" << dlog;
 					//mlog << "       Block: (" << blockCoord.x << ", " << blockCoord.y << "), Pos: (" << i.x << ", " << i.y << ") --> (" << ix.x << ", " << ix.y << ")" << dlog;
@@ -209,7 +209,7 @@ void Entity::_moveY(double amount) {
 			shared_ptr<Block> b = terrainManager.getBlock(blockCoord);
 			if (b != nullptr && b->getHitbox().contains(ix)) {
 				if (b->isSolid()) {
-					ix.y = b->getHitbox().top + b->getHitbox().height + 1e-7;  //HACK Minus EPS to avoid being treated as stuck in walls
+					ix.y = b->getHitbox().top + b->getHitbox().height + 1e-6;  //HACK Minus EPS to avoid being treated as stuck in walls
 					isHit = true;
 					//mlog << "[Entity / Collision] [Y-Negative] Hit: Entity {" << getUuid().toString() << "}" << dlog;
 					//mlog << "       Block: (" << blockCoord.x << ", " << blockCoord.y << "), Pos: (" << i.x << ", " << i.y << ") --> (" << ix.x << ", " << ix.y << ")" << dlog;

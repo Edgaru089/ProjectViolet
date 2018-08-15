@@ -4,7 +4,7 @@
 
 class BowItem :public Item {
 public:
-	BowItem(Dataset& data) :Item(data) {}
+	BowItem(Dataset& data, string slotDataIdPrefix) :Item(data, slotDataIdPrefix) {}
 	const string getItemId() override { return "bow"; }
 	int getMaxItemsPerSlotCount() override { return 1; }
 	TextureInfo getTextureInfo() override {
@@ -12,7 +12,7 @@ public:
 			return textureManager.getTextureInfo("item_bow");
 		else
 			return textureManager.getTextureInfo(StringParser::toStringF("item_bow_pulling_%d",
-				min(3, 1 + loadedTimeMilli() / 400)));
+																		 min(3, 1 + loadedTimeMilli() / 400)));
 	}
 
 	void updateLogic() override;

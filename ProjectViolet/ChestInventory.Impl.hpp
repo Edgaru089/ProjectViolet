@@ -26,7 +26,7 @@ void ChestInventory::runImGui() {
 				for (int j = 0; j < 9; j++) {
 					if (j != 0)
 						imgui::SameLine();
-					PlayerInventoryUI::ImGuiInventorySlot(c.chestSlots[i][j], i * 9 + j);
+					PlayerInventoryUI::ImGuiInventorySlot(c.getDataset(), i, j, 1677216);
 				}
 		}
 		catch (bad_cast) {

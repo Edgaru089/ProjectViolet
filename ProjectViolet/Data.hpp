@@ -118,11 +118,11 @@ public:
 
 	Data& operator [] (string id) { return datasets[id]; }
 
-	map<string, Data>& getDatasets() { return datasets; }
+	unordered_map<string, Data>& getDatasets() { return datasets; }
 
 private:
 
-	map<string, Data> datasets;
+	unordered_map<string, Data> datasets;
 
 };
 

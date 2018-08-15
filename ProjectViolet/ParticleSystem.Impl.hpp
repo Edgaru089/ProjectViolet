@@ -4,7 +4,7 @@
 
 
 ////////////////////////////////////////
-Particle::Particle(TextureInfo texture, double sizeDivisor, Time liveTime, Vector2d onScreenSize, double gravity, double airFriction) {
+Particle::Particle(TextureInfo texture, double sizeDivisor, Time timeToLive, Vector2d onScreenSize, double gravity, double airFriction) {
 	this->wholeText = texture;
 	this->size = onScreenSize;
 	this->gravity = gravity;
@@ -25,8 +25,8 @@ Particle::Particle(TextureInfo texture, double sizeDivisor, Time liveTime, Vecto
 
 	textureSubRect = IntRect(posX, posY, size.x, size.y);
 
-	this->liveTime = liveTime;
-	liveClock.restart();
+	this->timeToLive = timeToLive;
+	livedTime = milliseconds(0);
 
 	alive = true;
 }
@@ -41,7 +41,8 @@ void Particle::_updateLogic() {
 		vecY = vecY * pow(airFriction, logicIO.deltaTime.asSeconds());
 	}
 
-	if (liveClock.getElapsedTime() > liveTime)
+	livedTime += logicIO.deltaTime;
+	if (livedTime > timeToLive)
 		kill();
 }
 

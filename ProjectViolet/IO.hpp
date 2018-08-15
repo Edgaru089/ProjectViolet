@@ -17,6 +17,9 @@ struct RenderIO {
 	FloatRect viewRect;
 	DoubleRect viewRectBlock;
 
+	// Use interpolarated lightmask
+	bool useFancyLightmask;
+
 };
 
 // Handled by scene manager ( App class )
@@ -59,10 +62,6 @@ struct GameIO {
 	// Offset angle from the X-axis to the line between the player and the cursor
 	// in clockwise pattern
 	double degreeAngle;
-
-	// Game rules
-	// Does explosions damage terrain?
-	bool ruleExplosionDamagesTerrain;
 
 };
 

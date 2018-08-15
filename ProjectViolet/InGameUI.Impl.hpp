@@ -65,7 +65,7 @@ void InGameUIManager::runImGui() {
 			_runInventoryUI();
 
 			// Cursor item
-			TextureInfo info = textureManager.getTextureInfo(playerInventory.slotCursor["item_name"].getDataString());
+			TextureInfo info = textureManager.getTextureInfo(localPlayer->getDataset()["cursor_item_name"].getDataString());
 			if (info.vaild) {
 				ImVec2 pos = imgui::GetIO().MousePos;
 				imgui::GetOverlayDrawList()->AddImage((ImTextureID)info.texture->getNativeHandle(),
@@ -75,8 +75,8 @@ void InGameUIManager::runImGui() {
 					ImVec2((info.textureRect.left + info.textureRect.width) / (float)info.texture->getSize().x, (
 						info.textureRect.top + info.textureRect.height) / (float)info.texture->getSize().y));
 				pos.x -= 16 + 3 - 2; pos.y -= 16 + 3;
-				if (playerInventory.slotCursor["count"].getDataInt() != 1)
-					imgui::GetOverlayDrawList()->AddText(pos, ImU32(0xFFFFFFFF), StringParser::toString(playerInventory.slotCursor["count"].getDataInt()).c_str());
+				if (localPlayer->getDataset()["cursor_count"].getDataInt() != 1)
+					imgui::GetOverlayDrawList()->AddText(pos, ImU32(0xFFFFFFFF), StringParser::toString(localPlayer->getDataset()["cursor_count"].getDataInt()).c_str());
 			}
 
 			imgui::EndPopup();
@@ -98,41 +98,68 @@ void InGameUIManager::_runInventoryUI() {
 		for (int j = 0; j < 9; j++) {
 			if (j != 0)
 				imgui::SameLine();
-			PlayerInventoryUI::ImGuiInventorySlot(playerInventory.slots[i][j], 1677216 + i * 9 + j);
+			PlayerInventoryUI::ImGuiInventorySlot(localPlayer->getDataset(), i, j);
 		}
 	}
 	imgui::Dummy(ImVec2(.0f, 6.0f));
 	for (int j = 0; j < 9; j++) {
 		if (j != 0)
 			imgui::SameLine();
-		PlayerInventoryUI::ImGuiInventorySlot(playerInventory.slots[0][j], 1677216 + j);
+		PlayerInventoryUI::ImGuiInventorySlot(localPlayer->getDataset(), 0, j);
 	}
 }
 
 
 ////////////////////////////////////////
-void PlayerInventoryUI::ImGuiInventorySlot(Dataset& slotData, int pushId) {
-	Dataset& cursor = playerInventory.slotCursor;
+void PlayerInventoryUI::ImGuiInventorySlot(Dataset& dataset, int i, int j, int extraPushId) {
+	string slotPrefix = to_string(i) + to_string(j);
+	string slotName = dataset[to_string(i) + to_string(j) + "item_name"].getDataString(),
+		cursorName = localPlayer->getDataset()["cursor_item_name"].getDataString();
+	int slotCount = dataset[to_string(i) + to_string(j) + "count"].getDataInt(),
+		cursorCount = localPlayer->getDataset()["cursor_count"].getDataInt();
 
-	string& slotName = slotData["item_name"].getDataString(), &cursorName = cursor["item_name"].getDataString();
-	int& slotCount = slotData["count"].getDataInt(), &cursorCount = cursor["count"].getDataInt();
-
-	TextureInfo info = textureManager.getTextureInfo(slotData["item_name"].getDataString());
+	TextureInfo info = textureManager.getTextureInfo(dataset[to_string(i) + to_string(j) + "item_name"].getDataString());
 	if (!info.vaild)
 		info = textureManager.getTextureInfo("none");
 	shared_ptr<Item> item = nullptr;
 	if (slotName.size() > 5)
-		item = itemAllocator.allocate(slotName.substr(5), slotData);
+		item = itemAllocator.allocate(slotName.substr(5), dataset, to_string(i) + to_string(j), false);
 
 	int maxItemsThisSlot = maxItemsPerSlot;
 	if (item != nullptr)
 		maxItemsThisSlot = item->getMaxItemsPerSlotCount();
 
-	if (pushId != -1)
-		imgui::PushID(pushId);
+	if (extraPushId != -1)
+		imgui::PushID(extraPushId);
+	imgui::PushID(i * 9 + j);
+	bool mapMutated = false;
 	if (imgui::ImageButton(info.getSprite(), Vector2f(32, 32), 3)) {
-		if (cursorName != slotName)
-			swap(slotData, cursor);
+		if (cursorName != slotName) {
+			mapMutated = true;
+			vector<pair<string, Data>> newCursorData, newSlotData;
+			for (auto i = dataset.getDatasets().begin(); i != dataset.getDatasets().end();) {
+				auto& d = *i;
+				if (d.first.substr(0, 2) == slotPrefix) {
+					newCursorData.push_back(make_pair(d.first.substr(2), d.second));
+					i = dataset.getDatasets().erase(i);
+				}
+				else
+					i++;
+			}
+			for (auto i = localPlayer->getDataset().getDatasets().begin(); i != localPlayer->getDataset().getDatasets().end();) {
+				auto& d = *i;
+				if (d.first.substr(0, 7) == "cursor_") {
+					newSlotData.push_back(make_pair(d.first.substr(7), d.second));
+					i = localPlayer->getDataset().getDatasets().erase(i);
+				}
+				else
+					i++;
+			}
+			for (auto& i : newCursorData)
+				localPlayer->getDataset().getDatasets().insert(make_pair("cursor_" + i.first, i.second));
+			for (auto& i : newSlotData)
+				dataset.getDatasets().insert(make_pair(slotPrefix + i.first, i.second));
+		}
 		else {
 			// Stack items
 			int sum = slotCount + cursorCount;
@@ -140,10 +167,10 @@ void PlayerInventoryUI::ImGuiInventorySlot(Dataset& slotData, int pushId) {
 			if (slotCnt > maxItemsThisSlot)
 				slotCnt = maxItemsThisSlot;
 			int curCnt = sum - slotCnt;
-			slotCount = slotCnt;
-			cursorCount = curCnt;
+			dataset[to_string(i) + to_string(j) + "count"].setData(slotCnt);
+			localPlayer->getDataset()["cursor_count"].setData(curCnt);
 			if (curCnt == 0)
-				cursorName = ""s;
+				localPlayer->getDataset()["cursor_item_name"].setData(""s);
 		}
 	}
 
@@ -153,22 +180,22 @@ void PlayerInventoryUI::ImGuiInventorySlot(Dataset& slotData, int pushId) {
 				if (cursorName == "") {
 					// Spilt half
 					int curCnt = slotCount / 2 + slotCount % 2;
-					cursorName = slotName;
-					cursorCount = curCnt;
+					localPlayer->getDataset()["cursor_item_name"].setData(slotName);
+					localPlayer->getDataset()["cursor_count"].setData(curCnt);
 					if (slotCount - curCnt == 0)
-						slotName = ""s;
-					slotCount = slotCount - curCnt;
+						dataset[to_string(i) + to_string(j) + "item_name"].setData(""s);
+					dataset[to_string(i) + to_string(j) + "count"].setData(slotCount - curCnt);
 				}
 				else {
 					// TODO Intentory gestures
 					// Place one
 					if (slotName == "" || slotName == cursorName) {
-						slotName = cursorName;
+						dataset[to_string(i) + to_string(j) + "item_name"].setData(cursorName);
 						if (slotCount + 1 <= maxItemsThisSlot) {
-							slotCount++;
-							cursorCount--;
-							if (cursorCount == 0)
-								cursorName = "";
+							dataset[to_string(i) + to_string(j) + "count"].setData(slotCount + 1);
+							localPlayer->getDataset()["cursor_count"].setData(cursorCount - 1);
+							if (cursorCount - 1 == 0)
+								localPlayer->getDataset()["cursor_item_name"].setData(""s);
 						}
 					}
 				}
@@ -192,8 +219,9 @@ void PlayerInventoryUI::ImGuiInventorySlot(Dataset& slotData, int pushId) {
 			imgui::GetCurrentWindow()->DrawList->AddText(pos, ImU32(0xFFFFFFFF), StringParser::toString(slotCount).c_str());
 		}
 	}
-	if (pushId != -1)
+	if (extraPushId != -1)
 		imgui::PopID();
+	imgui::PopID();
 }
 
 

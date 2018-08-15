@@ -240,6 +240,8 @@
     <ClInclude Include="LogSystem.hpp" />
     <ClInclude Include="M16A4.hpp" />
     <ClInclude Include="Main.hpp" />
+    <ClInclude Include="MapEditorScene.hpp" />
+    <ClInclude Include="MapEditorScene.Impl.hpp" />
     <ClInclude Include="MinigunItem.hpp" />
     <ClInclude Include="Mob.hpp" />
     <ClInclude Include="Mob.Impl.hpp" />
@@ -269,6 +271,7 @@
     <ClInclude Include="SG55.Impl.hpp" />
     <ClInclude Include="Stone.hpp" />
     <ClInclude Include="StringParser.hpp" />
+    <ClInclude Include="WorldFileHandler.hpp" />
     <ClInclude Include="TerrainManager.hpp" />
     <ClInclude Include="TerrainGenerator.hpp" />
     <ClInclude Include="TerrainGenerator.Impl.hpp" />

@@ -12,7 +12,7 @@
 class Entity : public Lockable {
 public:
 
-	friend class NetworkHandler;
+	friend class WorldFileHandler;
 
 	Entity() :alive(false), uuid(Uuid::nil()), posX(0.0), posY(0.0), vecX(0.0), vecY(0.0) {}
 	virtual ~Entity() {}

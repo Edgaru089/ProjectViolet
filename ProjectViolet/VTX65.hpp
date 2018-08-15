@@ -4,7 +4,7 @@
 
 class VTX65 :public GunItem {
 public:
-	VTX65(Dataset& data) :GunItem(data) {}
+	VTX65(Dataset& data, string slotDataIdPrefix) :GunItem(data, slotDataIdPrefix) {}
 
 	const string getItemId() override { return "vtx65"; }
 
@@ -21,7 +21,7 @@ public:
 
 class VTX65Ammo :public Item {
 public:
-	VTX65Ammo(Dataset& d) :Item(d) {}
+	VTX65Ammo(Dataset& d, string slotDataIdPrefix) :Item(d, slotDataIdPrefix) {}
 	const string getItemId() override { return "vtx65_ammo"; }
 	int getMaxItemsPerSlotCount() override { return 6; }
 };

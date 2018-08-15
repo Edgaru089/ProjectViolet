@@ -19,20 +19,27 @@ public:
 
 public:
 
+	void clear() { entities.clear(); }
+
 	Uuid insert(shared_ptr<Entity> entitiy, Vector2d position);
+
+	// Does not call Entity::onCreate()
+	void insert(Uuid id, shared_ptr<Entity> entity);
 
 	shared_ptr<Entity> getEntity(Uuid id);
 
-	map<Uuid, shared_ptr<Entity>>& getEntityMapList() { return entities; }
+	unordered_map<Uuid, shared_ptr<Entity>, UuidHasher>& getEntityMapList() { return entities; }
 
 public:
 
 	// Summon an explosion
-	void explode(Vector2d position, double force, bool damageTerrain = gameIO.ruleExplosionDamagesTerrain);
+	void explode(Vector2d position, double force);
 
 private:
 
-	map<Uuid, shared_ptr<Entity>> entities;
+	friend class WorldFileHandler;
+
+	unordered_map<Uuid, shared_ptr<Entity>, UuidHasher> entities;
 
 };
 

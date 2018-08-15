@@ -57,7 +57,7 @@ class PlayerInventoryUI :public InGameUI {
 public:
 	const string getUIId() override { return "player_inventory_ui"; }
 
-	static void ImGuiInventorySlot(Dataset& slotData, int pushId = -1);
+	static void ImGuiInventorySlot(Dataset& slotData, int i, int j, int extraPushId = -1);
 
 	virtual void runImGui() override;
 	virtual string windowTitle() override { return "Player Inventory"; }

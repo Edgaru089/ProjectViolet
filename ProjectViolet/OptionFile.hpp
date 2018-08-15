@@ -60,7 +60,7 @@ public:
 	}
 
 	void change(string key, string value) {
-		map<string, Option>::iterator i = options.find(key);
+		auto i = options.find(key);
 		if (i == options.end()) {
 			options.insert(pair<string, Option>(key, Option(fileLines.size(), key, value)));
 			fileLines.push_back(StringParser::toStringF("%s=%s", key.c_str(), value.c_str()));
@@ -78,7 +78,7 @@ private:
 	ofstream fout;
 
 	vector<string> fileLines;
-	map<string, Option> options;
+	unordered_map<string, Option> options;
 
 };
 

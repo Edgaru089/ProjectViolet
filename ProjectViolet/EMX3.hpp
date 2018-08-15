@@ -4,7 +4,7 @@
 
 class EMX3 :public GunItem {
 public:
-	EMX3(Dataset& data) :GunItem(data) {}
+	EMX3(Dataset& data, string slotDataIdPrefix) :GunItem(data, slotDataIdPrefix) {}
 
 	const string getItemId() override { return "emx3"; }
 
@@ -20,7 +20,7 @@ public:
 
 class EMX3Ammo :public Item {
 public:
-	EMX3Ammo(Dataset& d) :Item(d) {}
+	EMX3Ammo(Dataset& d, string slotDataIdPrefix) :Item(d, slotDataIdPrefix) {}
 	const string getItemId() override { return "emx3_ammo"; }
 	int getMaxItemsPerSlotCount() override { return 6; }
 };

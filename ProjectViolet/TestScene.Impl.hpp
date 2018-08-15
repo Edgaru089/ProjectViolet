@@ -11,6 +11,7 @@
 #include "InGameUI.hpp"
 #include "PlayerInventory.hpp"
 #include "GamePausedUI.hpp"
+#include "WorldFileHandler.hpp"
 
 
 ////////////////////////////////////////
@@ -18,8 +19,6 @@ void TestScene::preWindowInitalaize() {
 	mlog << "[TestScene] PreWindowInitalaize Calling..." << dlog;
 
 	mlog << "[TestScene] Initalaizing Systems..." << dlog;
-	assetManager.loadListFile();
-	textureManager.bindTexture();
 
 	blockAllocator.initalaize();
 	entityAllocator.initalaize();
@@ -66,17 +65,22 @@ void TestScene::start(RenderWindow & win) {
 	mlog << "[TestScene] Scene Starting..." << dlog;
 	testEntity = Uuid::nil();
 
-	prov.setup(Vector2u(3, 2), 5);
+	if (terrainManager.getChunkCount() == Vector2i(0, 0)) {
+		terrainManager.clearChunks();
+		entityManager.clear();
+		particleSystem.clear();
 
-	localPlayer = make_shared<PlayerEntity>();
-	localPlayer->setIsLocalPlayer(true);
-	localPlayer->setHealth(localPlayer->getMaxHealth());
-	entityManager.insert(localPlayer, Vector2d(prov.getSpawnPoints()[0]) + Vector2d(0.5, 1 - 1e-7));
+		prov.setup(Vector2u(3, 2), 5);
 
-	renderIO.gameScaleFactor = 48.0;
-	gameIO.ruleExplosionDamagesTerrain = true;
-	showDebugInfo = false;
-	showExtraImGuiWindows = false;
+		localPlayer = make_shared<PlayerEntity>();
+		localPlayer->setIsLocalPlayer(true);
+		localPlayer->setHealth(localPlayer->getMaxHealth());
+		entityManager.insert(localPlayer, Vector2d(prov.getSpawnPoints()[0]) + Vector2d(0.5, 1 - 1e-7));
+
+		renderIO.gameScaleFactor = 48.0;
+		showDebugInfo = false;
+		showExtraImGuiWindows = false;
+	}
 
 	uiManager.changeUI(nullptr);
 
@@ -187,9 +191,9 @@ void TestScene::onRender(RenderWindow & win) {
 ////////////////////////////////////////
 bool TestScene::_sendMousePressedToHandItem(Mouse::Button button) {
 	bool flag = false;
-	const string& name = playerInventory.slots[0][playerInventory.cursorId]["item_name"];
+	const string& name = localPlayer->getDataset()["0" + to_string(playerInventory.cursorId) + "item_name"];
 	if (name.substr(0, 5) == "item_") {
-		shared_ptr<Item> item = itemAllocator.allocate(name.substr(5), playerInventory.slots[0][playerInventory.cursorId]);
+		shared_ptr<Item> item = itemAllocator.allocate(name.substr(5), localPlayer->getDataset(), "0" + to_string(playerInventory.cursorId), true);
 		if (item != nullptr && (button == Mouse::Left ? item->_onLeftPressed() : item->_onRightPressed()))
 			flag = true;
 	}
@@ -199,9 +203,9 @@ bool TestScene::_sendMousePressedToHandItem(Mouse::Button button) {
 
 ////////////////////////////////////////
 void TestScene::_sendMouseReleasedToHandItem(Mouse::Button button) {
-	const string& name = playerInventory.slots[0][playerInventory.cursorId]["item_name"];
+	const string& name = localPlayer->getDataset()["0" + to_string(playerInventory.cursorId) + "item_name"];
 	if (name.substr(0, 5) == "item_") {
-		shared_ptr<Item> item = itemAllocator.allocate(name.substr(5), playerInventory.slots[0][playerInventory.cursorId]);
+		shared_ptr<Item> item = itemAllocator.allocate(name.substr(5), localPlayer->getDataset(), "0" + to_string(playerInventory.cursorId), true);
 		if (item != nullptr) {
 			if (button == Mouse::Left)
 				item->_onLeftReleased();
@@ -216,7 +220,7 @@ void TestScene::_sendMouseReleasedToHandItem(Mouse::Button button) {
 void TestScene::updateLogic(RenderWindow & win) {
 	AUTOLOCK_ALL_SYSTEM;
 
-	static auto handleKeyState = [&](LogicIO::KeyState& state, bool isDown) {
+	auto handleKeyState = [&](LogicIO::KeyState& state, bool isDown) {
 		if (isDown) {
 			if (state == LogicIO::Released || state == LogicIO::JustReleased)
 				state = LogicIO::JustPressed;
@@ -257,20 +261,17 @@ void TestScene::updateLogic(RenderWindow & win) {
 		// Manage keys and game/player controls
 		// Mouse controls
 		if (!imgui::GetIO().WantCaptureMouse && logicIO.hasFocus && (logicIO.mouseState[Mouse::Left] == LogicIO::JustPressed))
-			if (!_sendMousePressedToHandItem(Mouse::Left))
-				terrainManager.breakBlock(TerrainManager::convertScreenPixelToWorldBlockCoord(logicIO.mousePos));
+			_sendMousePressedToHandItem(Mouse::Left);
 		if (logicIO.mouseState[Mouse::Left] == LogicIO::JustReleased)
 			_sendMouseReleasedToHandItem(Mouse::Left);
 		if (!imgui::GetIO().WantCaptureMouse && logicIO.hasFocus && (logicIO.mouseState[Mouse::Right] == LogicIO::JustPressed)) {
-			const string& str = playerInventory.slots[0][playerInventory.cursorId]["item_name"].getDataString();
+			const string& str = localPlayer->getDataset()["0" + to_string(playerInventory.cursorId) + "item_name"];
 			bool sendRightClick = true;
 			Vector2i coord = TerrainManager::convertScreenPixelToWorldBlockCoord(logicIO.mousePos);
 			shared_ptr<Block> b = terrainManager.getBlock(coord);
 			if (str != "") {
-				if (str.substr(0, 6) == "block_")
-					terrainManager.placeBlock(coord, str.substr(6));
-				else if (str.substr(0, 5) == "item_") {
-					shared_ptr<Item> item = itemAllocator.allocate(str.substr(5), playerInventory.slots[0][playerInventory.cursorId]);
+				if (str.substr(0, 5) == "item_") {
+					shared_ptr<Item> item = itemAllocator.allocate(str.substr(5), localPlayer->getDataset(), "0" + to_string(playerInventory.cursorId), true);
 					if (item != nullptr)
 						sendRightClick = !item->_onRightPressed();
 				}
@@ -410,7 +411,7 @@ void TestScene::runImGui() {
 		}
 		imgui::End();
 
-		imgui::Begin("Controls", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+		imgui::Begin("Controls##TestSceneControls", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 		imgui::ShowFontSelector("Fonts");
 		imgui::Text(u8"Innovation In China 中国智造，惠及全球 1234567890");
 		static char langFile[128] = { "lang-zh-Hans.list" };
@@ -419,22 +420,14 @@ void TestScene::runImGui() {
 		static float value = renderIO.gameScaleFactor;
 		imgui::SliderFloat("GameScaleFactor", &value, 16, 64);
 		renderIO.gameScaleFactor = value;
-		imgui::Checkbox("Explosion damages terrain", &gameIO.ruleExplosionDamagesTerrain);
-		if (imgui::Button("Break!"))
-			for (auto& k : terrainManager.getChunks()) {
-				Vector2i off = k.first*chunkSize;
-				shared_ptr<Chunk> c = k.second;
-				for (int i = 0; i < chunkSize; i++)
-					for (int j = 0; j < chunkSize; j++) {
-						if (c->getBlock(Vector2i(i, j)) == nullptr)
-							continue;
-						if (c->getBlock(Vector2i(i, j))->getBlockId() != "bedrock")
-							terrainManager.breakBlock(off + Vector2i(i, j));
-					}
-			}
-		imgui::SameLine();
+		imgui::Checkbox("Use Fancy Lightmask", &renderIO.useFancyLightmask);
 		if (imgui::Button("Start NovelGame"))
 			novelGameSystem.start("default");
+		imgui::SameLine();
+		if (imgui::Button("Save World"))
+			WorldFileHandler::saveToFile("world.save", terrainManager, entityManager);
+		if (imgui::Button("Load World"))
+			WorldFileHandler::loadFromFile("world.save", terrainManager, entityManager);
 		imgui::Image(*textureManager.getBindingTexture());
 		imgui::End();
 
@@ -509,20 +502,20 @@ void TestScene::runImGui() {
 			}
 		}
 
-		imgui::Text("Item In Hand");
-		imgui::Text("  CursorId: %d", playerInventory.cursorId);
-		Dataset& slot = playerInventory.slots[0][playerInventory.cursorId];
-		for (auto& i : slot.getDatasets()) {
-			imgui::Text("  %s:", i.first.c_str()); imgui::SameLine();
-			if (i.second.getType() == Data::Integer)
-				imgui::Text("%d", i.second.getDataInt());
-			else if (i.second.getType() == Data::String)
-				imgui::Text("%s", i.second.getDataString().c_str());
-			else if (i.second.getType() == Data::Bool)
-				pushBoolText(i.second.getDataBool(), false);
-			else if (i.second.getType() == Data::Uuid)
-				imgui::Text("{%s}", i.second.getDataUuid().toString());
-		}
+		//imgui::Text("Item In Hand");
+		//imgui::Text("  CursorId: %d", playerInventory.cursorId);
+		//Dataset& slot = playerInventory.slots[0][playerInventory.cursorId];
+		//for (auto& i : slot.getDatasets()) {
+		//	imgui::Text("  %s:", i.first.c_str()); imgui::SameLine();
+		//	if (i.second.getType() == Data::Integer)
+		//		imgui::Text("%d", i.second.getDataInt());
+		//	else if (i.second.getType() == Data::String)
+		//		imgui::Text("%s", i.second.getDataString().c_str());
+		//	else if (i.second.getType() == Data::Bool)
+		//		pushBoolText(i.second.getDataBool(), false);
+		//	else if (i.second.getType() == Data::Uuid)
+		//		imgui::Text("{%s}", i.second.getDataUuid().toString());
+		//}
 
 		imgui::Text("TerrainRender:  %d verts (%d tri)",
 			terrainListSize, terrainListSize / 3);

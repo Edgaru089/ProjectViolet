@@ -4,7 +4,7 @@
 
 class Barrett :public GunItem {
 public:
-	Barrett(Dataset& data) :GunItem(data) {}
+	Barrett(Dataset& data, string slotDataIdPrefix) :GunItem(data, slotDataIdPrefix) {}
 
 	const string getItemId() override { return "barrett"; }
 
@@ -20,7 +20,7 @@ public:
 
 class BarrettAmmo :public Item {
 public:
-	BarrettAmmo(Dataset& d) :Item(d) {}
+	BarrettAmmo(Dataset& d, string slotDataIdPrefix) :Item(d, slotDataIdPrefix) {}
 	const string getItemId() override { return "barrett_ammo"; }
 	int getMaxItemsPerSlotCount() override { return 6; }
 };

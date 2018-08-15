@@ -33,7 +33,7 @@ void EntityManager::updateLogic() {
 
 
 ////////////////////////////////////////
-void EntityManager::explode(Vector2d position, double force, bool damageTerrain) {
+void EntityManager::explode(Vector2d position, double force) {
 	// Damage
 	for (auto& i : entities) {
 		try {
@@ -45,22 +45,6 @@ void EntityManager::explode(Vector2d position, double force, bool damageTerrain)
 				m.harm(damage, position, damage / 5.0);
 		}
 		catch (bad_cast) {}
-	}
-
-	// TODO Terrain destruction
-	if (damageTerrain) {
-		for (auto& k : terrainManager.getChunks()) {
-			Vector2i off = k.first*chunkSize;
-			shared_ptr<Chunk> c = k.second;
-			for (int i = 0; i < chunkSize; i++)
-				for (int j = 0; j < chunkSize; j++) {
-					if (c->getBlock(Vector2i(i, j)) == nullptr)
-						continue;
-					Vector2d blockCenter = Vector2d(off + Vector2i(i, j)) + Vector2d(.5, .5);
-					if (sqr(getDis(blockCenter, position)*1.6) < force)
-						terrainManager.breakBlock(off + Vector2i(i, j));
-				}
-		}
 	}
 
 	// Particles
@@ -141,6 +125,19 @@ Uuid EntityManager::insert(shared_ptr<Entity> entity, Vector2d position) {
 	unlock();
 	entity->onCreate();
 	return id;
+}
+
+
+////////////////////////////////////////
+void EntityManager::insert(Uuid id, shared_ptr<Entity> entity) {
+	entity->setUuid(id);
+	lock();
+	auto i = entities.find(id);
+	if (i == entities.end())
+		entities.insert(make_pair(id, entity));
+	else
+		i->second = entity;
+	unlock();
 }
 
 

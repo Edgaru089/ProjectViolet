@@ -7,6 +7,7 @@
 
 #include "GameScene.hpp"
 #include "TestScene.hpp"
+#include "MapEditorScene.hpp"
 #include "IO.hpp"
 
 #include "TextSystem.hpp"
@@ -19,11 +20,16 @@ void App::initalaizePreWindow() {
 
 	sceneMapper["GameScene"] = new GameScene();
 	sceneMapper["TestScene"] = new TestScene();
+	sceneMapper["MapEditorScene"] = new MapEditorScene();
+
+	mlog << "[App] Initalaizing Asset Systems..." << dlog;
+	assetManager.loadListFile();
+	textureManager.bindTexture();
 
 	for (pair<const string, Scene*>& i : sceneMapper)
 		i.second->preWindowInitalaize();
 
-	currentScene = sceneMapper["TestScene"];
+	currentScene = sceneMapper["MapEditorScene"];
 
 	text.loadFromFile("lang.list");
 
@@ -100,6 +106,29 @@ void App::updateLogic(RenderWindow& win) {
 	logicIO.hasFocus = win.hasFocus();
 
 	// Keystate and mouse position handled by game scene for pausing game issues
+	if (currentScene->getSceneName() != "TestScene") {
+		auto handleKeyState = [&](LogicIO::KeyState& state, bool isDown) {
+			if (isDown) {
+				if (state == LogicIO::Released || state == LogicIO::JustReleased)
+					state = LogicIO::JustPressed;
+				else
+					state = LogicIO::Pressed;
+			}
+			else {
+				if (state == LogicIO::Pressed || state == LogicIO::JustPressed)
+					state = LogicIO::JustReleased;
+				else
+					state = LogicIO::Released;
+			}
+		};
+		// Update key states
+		// Keyboard
+		for (int i = 0; i < Keyboard::KeyCount; i++)
+			handleKeyState(logicIO.keyboardState[i], Keyboard::isKeyPressed((Keyboard::Key)i));
+		// Mouse
+		for (int i = 0; i < Mouse::ButtonCount; i++)
+			handleKeyState(logicIO.mouseState[i], Mouse::isButtonPressed((Mouse::Button)i));
+	}
 
 	currentScene->updateLogic(win);
 
@@ -124,4 +153,8 @@ void App::onStop() {
 	currentScene->stop();
 }
 
+
+void App::switchScene(string name) {
+	Scene::switchScene(sceneMapper[name]);
+}
 

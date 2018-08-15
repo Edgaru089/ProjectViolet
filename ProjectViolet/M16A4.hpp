@@ -4,7 +4,7 @@
 
 class M16A4 :public GunItem {
 public:
-	M16A4(Dataset& data) :GunItem(data) {}
+	M16A4(Dataset& data, string slotDataIdPrefix) :GunItem(data, slotDataIdPrefix) {}
 
 	const string getItemId() override { return "m16a4"; }
 
@@ -20,7 +20,7 @@ public:
 
 class M16A4Ammo :public Item {
 public:
-	M16A4Ammo(Dataset& d) :Item(d) {}
+	M16A4Ammo(Dataset& d, string slotDataIdPrefix) :Item(d, slotDataIdPrefix) {}
 	const string getItemId() override { return "m16a4_ammo"; }
 	int getMaxItemsPerSlotCount() override { return 12; }
 };

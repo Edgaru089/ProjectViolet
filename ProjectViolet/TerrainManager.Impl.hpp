@@ -186,8 +186,8 @@ shared_ptr<Chunk> TerrainManager::loadEmptyChunk(Vector2i id) {
 ////////////////////////////////////////
 void TerrainManager::unloadChunk(Vector2i id) {
 	AUTOLOCKABLE(*this);
-	map<Vector2i, shared_ptr<Chunk>, Vector2Less<int>>::iterator i;
-	if ((i = chunks.find(id)) != chunks.end()) {
+	auto i = chunks.find(id);
+	if (i != chunks.end()) {
 		chunks.erase(i);
 	}
 }
@@ -229,40 +229,6 @@ void TerrainManager::setBlock(Vector2i coord, string blockId) {
 	if (chunks.find(convertWorldCoordToChunkId(coord)) != chunks.end()) {
 		chunks[convertWorldCoordToChunkId(coord)]->setBlock(
 			convertWorldCoordToInChunkCoord(coord), blockAllocator.allocate(blockId));
-	}
-}
-
-
-////////////////////////////////////////
-void TerrainManager::breakBlock(Vector2i pos, Entity * breaker) {
-	AUTOLOCKABLE(*this);
-	auto i = chunks.find(convertWorldCoordToChunkId(pos));
-	if (i == chunks.end()) // Chunk not loaded
-		return;
-
-	shared_ptr<Chunk> c = i->second;
-	shared_ptr<Block> b = c->getBlock(convertWorldCoordToInChunkCoord(pos));
-	if (b != nullptr) {
-		b->onDestroy(breaker);
-		if (b->getLightStrength() > 0)
-			wantUpdateLight = true;
-		setBlock(pos, ""); // nullptr means empty
-	}
-}
-
-
-////////////////////////////////////////
-void TerrainManager::placeBlock(Vector2i pos, string blockId, Entity * placer, bool isForced) {
-	AUTOLOCKABLE(*this);
-	map<Vector2i, shared_ptr<Chunk>, Vector2Less<int>>::iterator i = chunks.find(convertWorldCoordToChunkId(pos));
-	if (i == chunks.end() || i->second == nullptr)
-		return;
-	if (i->second->getBlock(convertWorldCoordToInChunkCoord(pos)) == nullptr) {
-		shared_ptr<Block> b = blockAllocator.allocate(blockId);
-		i->second->setBlock(convertWorldCoordToInChunkCoord(pos), b);
-		b->_onPlaced(placer);
-		if (b->getLightStrength() > 0)
-			wantUpdateLight = true;
 	}
 }
 

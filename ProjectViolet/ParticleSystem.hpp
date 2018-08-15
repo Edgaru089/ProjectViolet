@@ -9,7 +9,7 @@ public:
 
 	Particle(TextureInfo texture,
 			 double sizeDivisor,
-			 Time liveTime,
+			 Time timeToLive,
 			 Vector2d onScreenSize = Vector2d(0.2, 0.2),
 			 double gravity = 2.8,
 			 double airFriction = .0);
@@ -37,8 +37,8 @@ protected:
 	double gravity;
 	double airFriction;
 
-	Time liveTime;
-	Clock liveClock;
+	Time timeToLive;
+	Time livedTime;
 
 };
 
@@ -50,6 +50,7 @@ public:
 	void getRenderList(VertexArray& verts); // Triangles
 
 	list<Particle>& getParticleList() { return parts; }
+	void clear() { parts.clear(); }
 public:
 
 	void emitSmoke(Vector2d position,

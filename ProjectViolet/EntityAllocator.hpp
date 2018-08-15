@@ -8,8 +8,8 @@ class EntityAllocator {
 public:
 	void initalaize();
 	shared_ptr<Entity> allocate(string id);
-private:
-	map<string, function<shared_ptr<Entity>(void)>> allocs;
+public:
+	unordered_map<string, function<shared_ptr<Entity>(void)>> allocs;
 };
 
 EntityAllocator entityAllocator;

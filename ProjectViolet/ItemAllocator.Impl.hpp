@@ -16,11 +16,12 @@
 #include "MRM36.hpp"
 #include "SG55.hpp"
 
-#define REGISTER_ITEM_TYPE(type) allocs.insert(make_pair(type(data).getItemId(), allocItem<type>))
+#define REGISTER_ITEM_TYPE(type) allocs.insert(make_pair(type(data, str).getItemId(), allocItem<type>))
 
 ////////////////////////////////////////
 void ItemAllocator::initalaize() {
 	Dataset data;
+	string str;
 	REGISTER_ITEM_TYPE(ArrowItem);
 	REGISTER_ITEM_TYPE(BowItem);
 	REGISTER_ITEM_TYPE(MinigunItem);
@@ -44,12 +45,12 @@ void ItemAllocator::initalaize() {
 
 
 ////////////////////////////////////////
-shared_ptr<Item> ItemAllocator::allocate(string id, Dataset& slot, bool hasFocus) {
+shared_ptr<Item> ItemAllocator::allocate(string id, Dataset& slot, string slotDataIdPrefix, bool hasFocus) {
 	auto i = allocs.find(id);
 	if (i == allocs.end())
 		return nullptr;
 	else {
-		shared_ptr<Item> it = i->second(slot);
+		shared_ptr<Item> it = i->second(slot, slotDataIdPrefix);
 		it->setFocus(hasFocus);
 		return it;
 	}

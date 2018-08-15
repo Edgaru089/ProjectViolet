@@ -46,14 +46,6 @@ public:
 	void setBlock(Vector2i coord, string blockId);
 
 public:
-
-	// Destroy/Break a block
-	void breakBlock(Vector2i pos, Entity * breaker = nullptr);
-
-	// Place a block
-	// Does nothing if the block isn't empty
-	void placeBlock(Vector2i pos, string blockId, Entity * placer = nullptr, bool isForced = false);
-
 	// Request a whole-map lighting update
 	void requestLightingUpdate() { wantUpdateLight = true; }
 
@@ -61,6 +53,7 @@ private:
 
 	void _updateLighting();
 
+	friend class WorldFileHandler;
 
 	map<Vector2i, shared_ptr<Chunk>, Vector2Less<int>> chunks;
 

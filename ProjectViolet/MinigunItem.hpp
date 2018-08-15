@@ -5,7 +5,7 @@
 
 class MinigunItem :public GunItem {
 public:
-	MinigunItem(Dataset& data) :GunItem(data) {}
+	MinigunItem(Dataset& data, string slotDataIdPrefix) :GunItem(data, slotDataIdPrefix) {}
 
 	const string getItemId() override { return "minigun"; }
 
@@ -20,7 +20,7 @@ public:
 
 class MinigunAmmoItem :public Item {
 public:
-	MinigunAmmoItem(Dataset& d) :Item(d) {}
+	MinigunAmmoItem(Dataset& d,string slotDataIdPrefix) :Item(d, slotDataIdPrefix) {}
 	const string getItemId() override { return "minigun_ammo"; }
 	int getMaxItemsPerSlotCount() override { return 8; }
 };

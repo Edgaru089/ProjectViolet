@@ -64,6 +64,15 @@
     <Filter Include="Game\Blocks&amp;Entities&amp;Items\Items\Base">
       <UniqueIdentifier>{307782a2-7b43-4ca7-8d00-85852d7bd7eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameGUI\Base">
+      <UniqueIdentifier>{8fa7125d-3d0b-4731-9799-5dc3dc5c2cbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\NovelGame">
+      <UniqueIdentifier>{334f1567-6cdb-4cdc-a0d3-3c162ca75907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\World">
+      <UniqueIdentifier>{9ec80ae8-b6e7-46e2-a2b2-4b16648bfa1f}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Game\Blocks&amp;Entities&amp;Items\Items\Items">
       <UniqueIdentifier>{91e61fdb-7e5b-4e96-aa79-cec88fad4c83}</UniqueIdentifier>
     </Filter>
@@ -75,12 +84,6 @@
     </Filter>
     <Filter Include="Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\Modern">
       <UniqueIdentifier>{1236e03e-208a-44c1-b59f-4c511e7b4c42}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\GameGUI\Base">
-      <UniqueIdentifier>{8fa7125d-3d0b-4731-9799-5dc3dc5c2cbe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\NovelGame">
-      <UniqueIdentifier>{334f1567-6cdb-4cdc-a0d3-3c162ca75907}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -425,6 +428,15 @@
     </ClInclude>
     <ClInclude Include="NovelGameSystem.Impl.hpp">
       <Filter>Game\NovelGame</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorScene.hpp">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldFileHandler.hpp">
+      <Filter>Game\World</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorScene.Impl.hpp">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

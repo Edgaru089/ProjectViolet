@@ -1,7 +1,10 @@
 #pragma once
 
-#include <cstdlib>
+#include <unordered_set>
+#include <unordered_map>
 #include <iostream>
+#include <cstdlib>
+#include <iomanip>
 #include <fstream>
 #include <atomic>
 #include <vector>
@@ -58,11 +61,11 @@ typedef sf::Rect<double> DoubleRect;
 
 //Constants
 const int majorVersion = 0, minorVersion = 0, patchVersion = 0;
-const string projectCode = "Project Majestic", projectSuffix = "Internal Release", releaseStage = "Alpha";
+const string projectCode = "Project Violet", projectSuffix = "Internal Release", releaseStage = "Alpha";
 const string compileTime = string(__DATE__) + " " + string(__TIME__);
 
 const double PI = 3.1415926535897932385;
-const double eps = 1e-6;
+const double eps = 3e-6;
 
 //Resources
 RenderWindow win;

@@ -9,8 +9,8 @@ public:
 	virtual ~BlockAllocator() {}
 	void initalaize();
 	shared_ptr<Block> allocate(string id);
-private:
-	map<string, function<shared_ptr<Block>(void)>> allocs;
+public:
+	unordered_map<string, function<shared_ptr<Block>(void)>> allocs;
 };
 
 BlockAllocator blockAllocator;

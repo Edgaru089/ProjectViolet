@@ -31,11 +31,11 @@ void GunItem::updateLogic() {
 			bool ok = false;
 			for (int i = 0; i < 4; i++)
 				for (int j = 0; j < 9; j++) {
-					auto& slot = playerInventory.slots[i][j];
-					if (slot["item_name"].getDataString() == magazineItemName()) {
-						slot["count"].getDataInt()--;
-						if (slot["count"].getDataInt() <= 0)
-							slot["item_name"].getDataString() = "";
+					auto& slot = localPlayer->getDataset();
+					if (slot[to_string(i) + to_string(j) + "item_name"].getDataString() == magazineItemName()) {
+						slot[to_string(i) + to_string(j) + "count"].getDataInt()--;
+						if (slot[to_string(i) + to_string(j) + "count"].getDataInt() <= 0)
+							slot[to_string(i) + to_string(j) + "item_name"].getDataString() = "";
 						ok = true;
 						break;
 					}
@@ -71,8 +71,8 @@ void GunItem::_pushExtraImguiItemsToDashboard() {
 	else {
 		imgui::Text(text.get("gunhud.ammo"), roundsLeft(), roundsPerMagazine());
 		imgui::PushStyleColor(ImGuiCol_PlotHistogram, Color(240 - 240 * (float)roundsLeft() / roundsPerMagazine(),
-			0,
-			240 * (float)roundsLeft() / roundsPerMagazine()));
+															0,
+															240 * (float)roundsLeft() / roundsPerMagazine()));
 		imgui::ProgressBar((float)roundsLeft() / roundsPerMagazine(), ImVec2(-1, 12), "");
 		imgui::PopStyleColor();
 	}

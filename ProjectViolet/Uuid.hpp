@@ -115,6 +115,12 @@ const bool operator <= (const Uuid& left, const Uuid& right) { return (left == r
 const bool operator > (const Uuid& left, const Uuid& right) { return !(left <= right); }
 const bool operator >= (const Uuid& left, const Uuid& right) { return !(left < right); }
 
+struct UuidHasher {
+	size_t operator ()(const Uuid& id) const {
+		return id.sc5_low4;
+	}
+};
+
 
 #ifdef SFML_PACKET_HPP
 

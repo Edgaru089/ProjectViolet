@@ -73,7 +73,7 @@ public:
 
 private:
 	// Id - TextUtf8
-	map<string, string> langs;
+	unordered_map<string, string> langs;
 	string empty;
 
 };

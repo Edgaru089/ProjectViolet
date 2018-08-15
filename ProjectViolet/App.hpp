@@ -25,6 +25,12 @@ public:
 
 	void onStop();
 
+public:
+
+	void switchScene(string name);
+
+public:
+
 	bool hasLog;
 private:
 

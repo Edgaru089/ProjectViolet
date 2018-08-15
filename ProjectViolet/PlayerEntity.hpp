@@ -11,6 +11,8 @@ class ItemEntity;
 class PlayerEntity :public Mob {
 public:
 
+	PlayerEntity();
+
 	const string getEntityId() override { return "player"; }
 	const double getFrictionDeaclc() override { return 45.0; }
 	const double getGravityAclc() override {

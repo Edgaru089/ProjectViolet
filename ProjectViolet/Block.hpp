@@ -21,14 +21,6 @@ public:
 	virtual ~Block() {}
 
 	virtual const string getBlockId() = 0;
-	shared_ptr<Block> copyAllocate() {
-		shared_ptr<Block> b = blockAllocator.allocate(getBlockId());
-		b->inChunkPos = inChunkPos;
-		b->chunk = chunk;
-		b->datasets = datasets;
-		_copyCustomData(b);
-		return b;
-	}
 
 	string getTextureId() { return "block_" + getBlockId(); }
 	TextureInfo getTextureInfo() { return textureManager.getTextureInfo(getTextureId()); }
@@ -66,16 +58,10 @@ public:
 	Vector2i getChunkId() { return chunk; }
 	void setChunkId(Vector2i chunkId) { chunk = chunkId; }
 
-	void onDestroy(Entity* destoryer = nullptr, bool drop = true);
-
 public:
 
-	virtual void _copyCustomData(shared_ptr<Block> b) {}
-
-	virtual void _onPlaced(Entity* placer) {}
 	virtual void _updateLogic() {}
 	virtual void _onCollision(Entity* entity) {}
-	virtual void _onDestroy(Entity* destroyer) {}
 	virtual void _onRightClick() {}
 
 protected:

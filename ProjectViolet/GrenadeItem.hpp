@@ -4,7 +4,7 @@
 
 class GrenadeItem :public Item {
 public:
-	GrenadeItem(Dataset& data) :Item(data) {}
+	GrenadeItem(Dataset& data, string slotDataIdPrefix) :Item(data, slotDataIdPrefix) {}
 
 	const string getItemId() override { return "grenade"; }
 	int getMaxItemsPerSlotCount() override { return 8; }

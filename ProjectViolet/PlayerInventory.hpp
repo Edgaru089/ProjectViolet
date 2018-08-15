@@ -21,13 +21,9 @@ public:
 
 	// Integer - count
 	// String - item_name
-	Dataset slots[4][9];
-	Dataset slotCursor;
+	// Uses localPlayer->dataset
 	int cursorId;
 
-private:
-
-	void _emptyDatasetSlot(Dataset& slot);
 };
 
 

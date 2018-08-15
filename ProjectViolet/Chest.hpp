@@ -16,9 +16,5 @@ public:
 	void _pushTriangleVertexes(VertexArray& verts) override;
 
 	void _onRightClick() override;
-	void _onDestroy(Entity* destroyer) override;
-
-
-	Dataset chestSlots[4][9];
 
 };

@@ -33,25 +33,24 @@ void Chunk::getRenderList(VertexArray& verts) {
 				TextureInfo tex = blocks[i][j]->getTextureInfo();
 				// Left-Top
 				verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y - width / 2.0),
-					Vector2f(tex.textureRect.left, tex.textureRect.top)));
-				// Right-Top
+									Vector2f(tex.textureRect.left, tex.textureRect.top)));
+								// Right-Top
 				verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y - width / 2.0),
-					Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top)));
-				// Left-Bottom
+									Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top)));
+								// Left-Bottom
 				verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y + width / 2.0),
-					Vector2f(tex.textureRect.left, tex.textureRect.top + tex.textureRect.height)));
-				// Right-Top
+									Vector2f(tex.textureRect.left, tex.textureRect.top + tex.textureRect.height)));
+								// Right-Top
 				verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y - width / 2.0),
-					Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top)));
-				// Left-Bottom
+									Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top)));
+								// Left-Bottom
 				verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y + width / 2.0),
-					Vector2f(tex.textureRect.left, tex.textureRect.top + tex.textureRect.height)));
-				// Right-Bottom
+									Vector2f(tex.textureRect.left, tex.textureRect.top + tex.textureRect.height)));
+								// Right-Bottom
 				verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y + width / 2.0),
-					Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top + tex.textureRect.height)));
+									Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top + tex.textureRect.height)));
 			}
 		}
-	verts.setPrimitiveType(PrimitiveType::Triangles);
 }
 
 
@@ -67,30 +66,54 @@ void Chunk::getLightMask(VertexArray& verts) {
 				i + id.x*chunkSize, j + id.y*chunkSize, 1, 1)))
 				continue;
 
-			Uint8 mask = 63 + 192.0*((double)lightLevel[i][j] / maxLightingLevel);
+			auto getAverageLightMask = [&](Vector2i lt)->Uint8 {
+				int sum = 0;
+				int cnt = 0;
+				for (int i = 0; i <= 1; i++)
+					for (int j = 0; j <= 1; j++) {
+						auto c = terrainManager.getChunk(TerrainManager::convertWorldCoordToChunkId(lt + Vector2i(i, j)));
+						if (c != nullptr) {
+							Vector2i inc = TerrainManager::convertWorldCoordToInChunkCoord(lt + Vector2i(i, j));
+							sum += c->lightLevel[inc.x][inc.y];
+							cnt++;
+						}
+					}
+				return 63 + 192.0*((double)sum / cnt / maxLightingLevel);
+			};
+
+
+			Uint8 masklt, maskrt, masklb, maskrb;
+			if (renderIO.useFancyLightmask) {
+				Vector2i pos = TerrainManager::convertChunkToWorldCoord(getChunkId(), Vector2i(i, j)) - Vector2i(1, 1);
+				masklt = getAverageLightMask(pos);
+				maskrt = getAverageLightMask(pos + Vector2i(1, 0));
+				masklb = getAverageLightMask(pos + Vector2i(0, 1));
+				maskrb = getAverageLightMask(pos + Vector2i(1, 1));
+			}
+			else
+				masklt = maskrt = masklb = maskrb = 63 + 192.0*((double)lightLevel[i][j] / maxLightingLevel);
 
 			// Mask
 			// Left-Top
 			verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y - width / 2.0),
-				Color(0, 0, 0, 255 - mask)));
+								Color(0, 0, 0, 255 - masklt)));
 			// Right-Top
 			verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y - width / 2.0),
-				Color(0, 0, 0, 255 - mask)));
+								Color(0, 0, 0, 255 - maskrt)));
 			// Left-Bottom
 			verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y + width / 2.0),
-				Color(0, 0, 0, 255 - mask)));
+								Color(0, 0, 0, 255 - masklb)));
 			// Right-Top
 			verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y - width / 2.0),
-				Color(0, 0, 0, 255 - mask)));
+								Color(0, 0, 0, 255 - maskrt)));
 			// Left-Bottom
 			verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y + width / 2.0),
-				Color(0, 0, 0, 255 - mask)));
+								Color(0, 0, 0, 255 - masklb)));
 			// Right-Bottom
 			verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y + width / 2.0),
-				Color(0, 0, 0, 255 - mask)));
+								Color(0, 0, 0, 255 - maskrb)));
 
 		}
-	verts.setPrimitiveType(PrimitiveType::Triangles);
 }
 
 

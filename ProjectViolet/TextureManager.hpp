@@ -50,7 +50,7 @@ private:
 	Texture * texture;
 
 	vector<pair<string, Image>> images;
-	map<string, IntRect> rects;
+	unordered_map<string, IntRect> rects;
 
 };
 

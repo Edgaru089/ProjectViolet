@@ -5,7 +5,7 @@
 
 class GunItem :public Item {
 public:
-	GunItem(Dataset& data) :Item(data) {}
+	GunItem(Dataset& data, string slotDataIdPrefix) :Item(data, slotDataIdPrefix) {}
 
 	virtual const string getItemId() = 0;
 
@@ -31,11 +31,11 @@ public:
 
 protected:
 
-	int& shootCooldownMill() { return slotDataset["shoot_cooldown"].getDataInt(); }
-	bool& isShooting() { return slotDataset["is_shooting"].getDataBool(); };
-	int& roundsLeft() { return slotDataset["rounds_left"].getDataInt(); }
-	int& reloadedTimeMill() { return slotDataset["reloaded_time"].getDataInt(); }
-	bool& isReloading() { return slotDataset["is_reloading"].getDataBool(); }
+	int& shootCooldownMill() { return slotDataset[slotDataIdPrefix + "shoot_cooldown"].getDataInt(); }
+	bool& isShooting() { return slotDataset[slotDataIdPrefix + "is_shooting"].getDataBool(); };
+	int& roundsLeft() { return slotDataset[slotDataIdPrefix + "rounds_left"].getDataInt(); }
+	int& reloadedTimeMill() { return slotDataset[slotDataIdPrefix + "reloaded_time"].getDataInt(); }
+	bool& isReloading() { return slotDataset[slotDataIdPrefix + "is_reloading"].getDataBool(); }
 
 };
 

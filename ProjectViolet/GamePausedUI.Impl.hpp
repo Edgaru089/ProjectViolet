@@ -32,6 +32,8 @@ void GamePausedUI::runImGui() {
 			; // TODO Options
 		if (imgui::Button(text.get("menu.backtotitle"), ImVec2(300, 36)))
 			; // TODO Title Screen
+		if (imgui::Button("Jump to MapEditorScene", ImVec2(300, 36)))
+			app->switchScene("MapEditorScene");
 		imgui::PopStyleVar();
 		imgui::PopStyleColor(3);
 		imgui::EndPopup();

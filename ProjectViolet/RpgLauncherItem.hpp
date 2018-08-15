@@ -4,7 +4,7 @@
 
 class RpgLauncherItem :public GunItem {
 public:
-	RpgLauncherItem(Dataset& data) :GunItem(data) {}
+	RpgLauncherItem(Dataset& data, string slotDataIdPrefix) :GunItem(data, slotDataIdPrefix) {}
 
 	const string getItemId() override { return "rpg_launcher"; }
 	TextureInfo getTextureInfo() override {
@@ -26,7 +26,7 @@ public:
 
 class RpgAmmoItem :public Item {
 public:
-	RpgAmmoItem(Dataset& data) :Item(data) {}
+	RpgAmmoItem(Dataset& data, string slotDataIdPrefix) :Item(data, slotDataIdPrefix) {}
 	const string getItemId() override { return "rpg_ammo"; }
 	int getMaxItemsPerSlotCount() override { return 16; }
 };

@@ -20,6 +20,6 @@ public:
 	void _onCollideEntity(shared_ptr<Entity> e) override;
 
 private:
-	set<Uuid> hitMobs;
+	unordered_set<Uuid, UuidHasher> hitMobs;
 	Clock particleClock;
 };

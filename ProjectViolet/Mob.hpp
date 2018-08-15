@@ -6,6 +6,8 @@
 class Mob :public Entity {
 public:
 
+	friend class WorldFileHandler;
+
 	Mob() :Entity() {}
 	virtual ~Mob() {}
 

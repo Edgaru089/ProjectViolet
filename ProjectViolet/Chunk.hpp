@@ -29,8 +29,6 @@ public:
 
 	void _resize(int width, int height);
 
-	// First: pos(global coords); Second: strength
-	map<Uuid, pair<Vector2i, int>> lightSources;
 	vector<vector<shared_ptr<Block>>> blocks;
 	vector<vector<int>> lightLevel;
 	Vector2i id;

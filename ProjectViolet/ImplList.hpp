@@ -25,6 +25,7 @@
 #include "ItemAllocator.Impl.hpp"
 #include "ItemEntity.Impl.hpp"
 #include "LaserBullet.Impl.hpp"
+#include "MapEditorScene.Impl.hpp"
 #include "Mob.Impl.hpp"
 #include "MRM36.Impl.hpp"
 #include "NovelGameSystem.Impl.hpp"

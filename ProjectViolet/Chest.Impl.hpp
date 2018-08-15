@@ -10,8 +10,8 @@
 Chest::Chest() {
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 9; j++) {
-			chestSlots[i][j].setData("item_name", ""s);
-			chestSlots[i][j].setData("count", 0);
+			setData(to_string(i) + to_string(j) + "item_name", ""s);
+			setData(to_string(i) + to_string(j) + "count", 0);
 		}
 }
 
@@ -58,22 +58,3 @@ void Chest::_onRightClick() {
 	uiManager.changeUI(make_shared<ChestInventory>(getPosition()));
 }
 
-
-////////////////////////////////////////
-void Chest::_onDestroy(Entity* destroyer) {
-	for (int i = 0; i < 4; i++)
-		for (int j = 0; j < 9; j++) {
-			if (chestSlots[i][j]["item_name"].getDataString() != ""s) {
-				// Drop Items
-				// Borrow code from Block::onDestroy()
-				int count = chestSlots[i][j]["count"].getDataInt();
-				for (int k = 1; k <= count; k++) {
-					// Tile Drop
-					shared_ptr<ItemEntity> e = make_shared<ItemEntity>(chestSlots[i][j]["item_name"].getDataString());
-					// Give a random velocity
-					e->accelerateVector(1.0, 180 + rand() % 180);
-					entityManager.insert(e, Vector2d(TerrainManager::convertChunkToWorldCoord(chunk, inChunkPos)) + Vector2d(0.5, 0.8));
-				}
-			}
-		}
-}
