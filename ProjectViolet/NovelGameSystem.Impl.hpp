@@ -85,7 +85,7 @@ void NovelGameParagraph::runUntilPause() {
 				speaker->loadFromFile(assetManager.getAssetFilename(param));
 			}
 		}
-		else if (comm == "SPEAKERFILE") {
+		else if (comm == "SPEAKERFILE" || comm == "IMAGEFILE") {
 			if (param == "")
 				speaker = nullptr;
 			else {
@@ -206,10 +206,17 @@ u8R"(匕刁丐歹戈夭仑讥冗邓艾夯凸卢叭叽皿凹囚矢乍尔冯玄邦
 	range.clear();
 	builder.BuildRanges(&range);
 
+	ImFontConfig config;
+	config.PixelSnapH = 1;
+	config.RasterizerMultiply = 1.2f;
+	config.OversampleH = 3;
+	config.OversampleV = 1.5;
+
 	font = imgui::GetIO().Fonts->AddFontFromFileTTF(
 		assetManager.getAssetFilename("novelgame_font").c_str(),
+		/*"simsun.ttc",*/
 		28.0f,
-		nullptr,
+		&config,
 		range.Data
 	);
 

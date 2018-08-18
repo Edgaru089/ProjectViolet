@@ -53,9 +53,12 @@ public:
 	// Empty Uuid ( Nil 00000000-0000-0000-0000-000000000000 )
 	Uuid() :sc1(0), sc2(0), sc3(0), sc4(0), sc5_high2(0), sc5_low4(0) {}
 	Uuid(const Uuid& copy) :sc1(copy.sc1), sc2(copy.sc2), sc3(copy.sc3), sc4(copy.sc4), sc5_high2(copy.sc5_high2), sc5_low4(copy.sc5_low4) {}
+	Uuid(const string& fromString) {
+		sscanf(fromString.c_str(), "%08x-%04hx-%04hx-%04hx-%04hx%08x", &sc1, &sc2, &sc3, &sc4, &sc5_high2, &sc5_low4);
+	}
 
 	string toString() const {
-		return StringParser::toStringF("%08x-%04x-%04x-%04x-%04x%08x",
+		return StringParser::toStringF("%08x-%04hx-%04hx-%04hx-%04hx%08x",
 			sc1, sc2, sc3, sc4, sc5_high2, sc5_low4);
 	}
 

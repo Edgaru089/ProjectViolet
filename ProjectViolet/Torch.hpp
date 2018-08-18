@@ -10,7 +10,7 @@ public:
 
 	const string getBlockId() override { return "torch"; }
 	bool isSolid() override { return false; }
-	int getLightStrength() override { return 12; }
+	int getLightSourceStrength() override { return 12; }
 
 private:
 

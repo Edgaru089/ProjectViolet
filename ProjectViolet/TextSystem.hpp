@@ -21,7 +21,7 @@ public:
 		ifstream fin(filename);
 		if (!fin.good()) {
 			return false;
-			mlog << Log::Error << "             File Open Failed!" << dlog;
+			mlog << Log::Error << "[TextSystem] File Open Failed!" << dlog;
 		}
 
 		// UTF-8 Signature (EF BB BF)

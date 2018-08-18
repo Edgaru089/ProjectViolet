@@ -24,7 +24,7 @@ public:
 
 private:
 	Time triggerTime;
-	Clock liveClock;
+	int& fuseBurnedTimeMill() { return datasets["fused_time"].getDataInt(); }
 
 	bool wantSetSpeed;
 	Vector2d setSpeed;

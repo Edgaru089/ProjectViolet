@@ -107,6 +107,7 @@ void App::updateLogic(RenderWindow& win) {
 
 	// Keystate and mouse position handled by game scene for pausing game issues
 	if (currentScene->getSceneName() != "TestScene") {
+		logicIO.mousePos = Mouse::getPosition(win);
 		auto handleKeyState = [&](LogicIO::KeyState& state, bool isDown) {
 			if (isDown) {
 				if (state == LogicIO::Released || state == LogicIO::JustReleased)

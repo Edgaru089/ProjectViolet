@@ -168,18 +168,24 @@ void TerrainManager::getLightMask(VertexArray& array) {
 
 
 ////////////////////////////////////////
-shared_ptr<Chunk> TerrainManager::loadEmptyChunk(Vector2i id) {
+shared_ptr<Chunk> TerrainManager::loadEmptyChunk(Vector2i id, string fillBlockId) {
 	AUTOLOCKABLE(*this);
-	auto i = chunks.insert(make_pair(id, make_shared<Chunk>())).first;
-	i->second->id = id;
-	i->second->setChunkId(id.x, id.y);
-	i->second->blocks.resize(chunkSize);
-	i->second->lightLevel.resize(chunkSize);
-	for (int j = 0; j < chunkSize; j++) {
-		i->second->blocks[j].resize(chunkSize, nullptr);
-		i->second->lightLevel[j].resize(chunkSize, 0);
+	auto it = chunks.insert(make_pair(id, make_shared<Chunk>())).first;
+	it->second->id = id;
+	it->second->setChunkId(id.x, id.y);
+	it->second->blocks.resize(chunkSize);
+	it->second->lightLevel.resize(chunkSize);
+	for (int i = 0; i < chunkSize; i++) {
+		it->second->blocks[i].resize(chunkSize, nullptr);
+		it->second->lightLevel[i].resize(chunkSize, 0);
+		if (blockAllocator.allocs.find(fillBlockId) != blockAllocator.allocs.end())
+			for (int j = 0; j < chunkSize; j++) {
+				it->second->blocks[i][j] = blockAllocator.allocate(fillBlockId);
+				it->second->blocks[i][j]->setChunkId(id);
+				it->second->blocks[i][j]->setInChunkPosition(i, j);
+			}
 	}
-	return i->second;
+	return it->second;
 }
 
 
@@ -244,9 +250,9 @@ void TerrainManager::_updateLighting() {
 		for (int i = 0; i < chunkSize; i++)
 			for (int j = 0; j < chunkSize; j++)
 				if (c->getBlock(Vector2i(i, j)) != nullptr &&
-					c->getBlock(Vector2i(i, j))->getLightStrength() > 0)
+					c->getBlock(Vector2i(i, j))->getLightSourceStrength() > 0)
 					lights.push_back(make_pair(convertChunkToWorldCoord(k.first, Vector2i(i, j)),
-											   c->getBlock(Vector2i(i, j))->getLightStrength()));
+											   c->getBlock(Vector2i(i, j))->getLightSourceStrength()));
 	}
 
 	for (auto& l : chunks) {

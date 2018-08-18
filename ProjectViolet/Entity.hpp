@@ -103,7 +103,7 @@ protected:
 
 	virtual void _getBoundingCollisionPoints(vector<Vector2d>& vec);
 
-private:
+public:
 
 	void _moveX(double);
 	void _moveY(double);

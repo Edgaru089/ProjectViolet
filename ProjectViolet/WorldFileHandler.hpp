@@ -10,6 +10,9 @@ public:
 	static bool loadFromFile(const string& filename, TerrainManager& terrain, EntityManager& entity) {
 		mlog << "[WorldFileHandler] Loading World to File: " << filename << dlog;
 
+		terrain.clearChunks();
+		entity.entities.clear();
+
 		mlog << "[WorldFileHandler] Loading Terrain..." << dlog;
 		ifstream tin(filename + ".terrain");
 		if (!tin) {
@@ -20,7 +23,6 @@ public:
 		int chunkcnt;
 		int sx, sy;
 		tin >> sx >> sy >> chunkcnt;
-		terrain.clearChunks();
 		terrain.setChunkCount(Vector2i(sx, sy));
 		for (int i = 1; i <= chunkcnt; i++) {
 			int x, y;
@@ -62,7 +64,6 @@ public:
 		ein >> cnt;
 		ein >> playerUuid.sc1 >> playerUuid.sc2 >> playerUuid.sc3 >> playerUuid.sc4 >> playerUuid.sc5_high2 >> playerUuid.sc5_low4;
 		string line;
-		entity.entities.clear();
 		for (int i = 1; i <= cnt; i++) {
 			do {
 				getline(ein, line);

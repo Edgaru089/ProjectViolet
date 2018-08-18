@@ -19,13 +19,16 @@ public:
 
 public:
 
+	friend class WorldFileHandler;
+	friend class MapEditorScene;
+
 	~TerrainManager();
 
 	void updateLogic();
 	void getRenderList(VertexArray& array); // Triangles
 	void getLightMask(VertexArray& array); // Triangles
 
-	shared_ptr<Chunk> loadEmptyChunk(Vector2i id);
+	shared_ptr<Chunk> loadEmptyChunk(Vector2i id, string fillBlockId = "");
 
 	void unloadChunk(Vector2i id);
 
@@ -52,8 +55,6 @@ public:
 private:
 
 	void _updateLighting();
-
-	friend class WorldFileHandler;
 
 	map<Vector2i, shared_ptr<Chunk>, Vector2Less<int>> chunks;
 

@@ -32,7 +32,12 @@ shared_ptr<Entity> EntityAllocator::allocate(string id) {
 	auto i = allocs.find(id);
 	if (i == allocs.end())
 		return nullptr;
-	else
-		return i->second();
+	else {
+		auto e = i->second();
+		auto m = dynamic_pointer_cast<Mob>(e);
+		if (m != nullptr)
+			m->setHealth(m->getMaxHealth());
+		return e;
+	}
 }
 

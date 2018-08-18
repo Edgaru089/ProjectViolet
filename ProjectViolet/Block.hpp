@@ -33,7 +33,7 @@ public:
 	void updateLogic();
 
 	// Zerom means none
-	virtual int getLightStrength() { return 0; }
+	virtual int getLightSourceStrength() { return 0; }
 
 	Data& getData(string id) {
 		return datasets[id];

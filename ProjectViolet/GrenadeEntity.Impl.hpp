@@ -9,7 +9,7 @@
 void GrenadeEntity::throwGrenade(Time triggerTime, double degree, Vector2d pos) {
 	shared_ptr<GrenadeEntity> e = make_shared<GrenadeEntity>();
 	e->accelerateVector(10.0, gameIO.degreeAngle);
-	e->liveClock.restart();
+	e->fuseBurnedTimeMill() = 0;
 	e->triggerTime = triggerTime;
 	entityManager.insert(e, localPlayer->getEyePosition() + Vector2d(.0, e->getSize().y / 2.0));
 }
@@ -22,7 +22,8 @@ void GrenadeEntity::_updateLogic() {
 		vecY = setSpeed.y;
 		wantSetSpeed = false;
 	}
-	if (liveClock.getElapsedTime() > triggerTime) {
+	fuseBurnedTimeMill() += logicIO.deltaTime.asMilliseconds();
+	if (fuseBurnedTimeMill() > triggerTime.asMilliseconds()) {
 		entityManager.explode(getCenterPos(), grenadeDamage);
 		kill();
 	}

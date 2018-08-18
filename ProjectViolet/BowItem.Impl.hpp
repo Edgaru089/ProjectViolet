@@ -5,7 +5,8 @@
 
 ////////////////////////////////////////
 void BowItem::updateLogic() {
-	loadedTimeMilli() += logicIO.deltaTime.asMilliseconds();
+	if (isLoading())
+		loadedTimeMilli() += logicIO.deltaTime.asMilliseconds();
 }
 
 
@@ -25,6 +26,7 @@ bool BowItem::_onRightPressed() {
 			}
 		}
 	if (ok) {
+		isLoading() = true;
 		loadedTimeMilli() = 0;
 	}
 	return true;
@@ -33,10 +35,9 @@ bool BowItem::_onRightPressed() {
 
 ////////////////////////////////////////
 void BowItem::_onRightReleased() {
-	if (slotDataset[slotDataIdPrefix + "bow_start_time"].getDataInt() != 0) {
+	if (isLoading()) {
 		double stage = min(1.0, 0.2 +
 			(double)(loadedTimeMilli()) / 1200.0 * 0.8);
-		slotDataset[slotDataIdPrefix + "bow_start_time"].setData(0);
 		// TODO Force and damage change
 		ArrowEntity::shoot(stage*maxArrowDamage);
 	}

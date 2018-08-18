@@ -18,6 +18,7 @@ void MapEditorScene::preWindowInitalaize() {
 void MapEditorScene::start(RenderWindow& win) {
 	renderIO.gameScaleFactor = 48.0;
 	selectedEntities.clear();
+	selectedBlock = Vector2i(-1, -1);
 	logicPaused = true;
 }
 
@@ -66,6 +67,41 @@ void MapEditorScene::onRender(RenderWindow& win) {
 				else
 					win.draw(renderRect(i.second->getHitbox()*renderIO.gameScaleFactor, Color(255, 255, 255, 160)));
 
+	if (selectedBlock != Vector2i(-1, -1)) {
+		auto b = terrainManager.getBlock(selectedBlock);
+		if (b == nullptr) {
+			Vector2d center = Vector2d(selectedBlock.x + 0.5, selectedBlock.y + 0.5)*renderIO.gameScaleFactor;
+			double width = renderIO.gameScaleFactor;
+			VertexArray verts;
+			verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y - width / 2.0), Color(255, 255, 255, 192)));
+			verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y - width / 2.0), Color(255, 255, 255, 192)));
+			verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y + width / 2.0), Color(255, 255, 255, 192)));
+			verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y + width / 2.0), Color(255, 255, 255, 192)));
+			verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y - width / 2.0), Color(255, 255, 255, 192)));
+			verts.setPrimitiveType(PrimitiveType::LinesStrip);
+			win.draw(verts);
+		}
+		else
+			win.draw(renderRect(b->getHitbox()*renderIO.gameScaleFactor));
+	}
+
+	Vector2i mousePos = TerrainManager::convertScreenPixelToWorldBlockCoord(logicIO.mousePos);
+	shared_ptr<Block> b = terrainManager.getBlock(mousePos);
+	if (b == nullptr) {
+		Vector2d center = Vector2d(mousePos.x + 0.5, mousePos.y + 0.5)*renderIO.gameScaleFactor;
+		double width = renderIO.gameScaleFactor;
+		VertexArray verts;
+		verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y - width / 2.0), Color(255, 255, 255, 128)));
+		verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y - width / 2.0), Color(255, 255, 255, 128)));
+		verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y + width / 2.0), Color(255, 255, 255, 128)));
+		verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y + width / 2.0), Color(255, 255, 255, 128)));
+		verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y - width / 2.0), Color(255, 255, 255, 128)));
+		verts.setPrimitiveType(PrimitiveType::LinesStrip);
+		win.draw(verts);
+	}
+	else
+		win.draw(renderRect(b->getHitbox()*renderIO.gameScaleFactor, Color(255, 255, 255, 128)));
+
 	win.setView(View(FloatRect(Vector2f(0, 0), Vector2f(logicIO.renderSize))));
 	if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Left] == LogicIO::Pressed)
 		win.draw(renderRect(DoubleRect(min(mousePosBeforePress.x, Mouse::getPosition(win).x), min(mousePosBeforePress.y, Mouse::getPosition(win).y),
@@ -87,6 +123,11 @@ void MapEditorScene::updateLogic(RenderWindow& win) {
 		for (auto i : entityManager.getEntityMapList())
 			if (i.second != nullptr && (i.second->getHitbox().intersects(rect) || i.second->getHitbox().contains(curpos)))
 				selectedEntities.insert(i.first);
+		if (selectedEntities.size() == 0)
+			if (selectedBlock == Vector2i(-1, -1))
+				selectedBlock = TerrainManager::convertScreenPixelToWorldBlockCoord(logicIO.mousePos);
+			else
+				selectedBlock = Vector2i(-1, -1);
 	}
 	if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Middle] == LogicIO::JustPressed)
 		mousePosBeforePress = Mouse::getPosition(win);
@@ -95,16 +136,39 @@ void MapEditorScene::updateLogic(RenderWindow& win) {
 		mousePosBeforePress = Mouse::getPosition(win);
 	}
 
-	if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Right] == LogicIO::JustPressed)
-		mousePosBeforePress = logicIO.mousePos;
-	if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Right] == LogicIO::Pressed) {
-		bool moving = false;
-		for (auto& i : inspectingEntities) {
-			auto e = entityManager.getEntity(i);
-			if (e != nullptr&&e->getHitbox().contains(TerrainManager::convertScreenPixelToWorldCoord(logicIO.mousePos)))
-				e->setPosition(e->getPosition() + Vector2d(Mouse::getPosition(win) - mousePosBeforePress));
+	//if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Right] == LogicIO::JustPressed)
+	//	mousePosBeforePress = logicIO.mousePos;
+	//if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Right] == LogicIO::Pressed) {
+	//	bool moving = false;
+	//	for (auto& i : selectedEntities) {
+	//		auto e = entityManager.getEntity(i);
+	//		if (e != nullptr&&e->getHitbox().contains(TerrainManager::convertScreenPixelToWorldCoord(logicIO.mousePos))) {
+	//			Vector2d move = (Vector2d(Mouse::getPosition(win) - mousePosBeforePress)) / renderIO.gameScaleFactor;
+	//			e->_moveX(move.x);
+	//			e->_moveY(move.y);
+	//		}
+	//	}
+	//	mousePosBeforePress = logicIO.mousePos;
+	//}
+
+	if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Right] == LogicIO::JustReleased) {
+		if (insertingEntity) {
+			auto p = entityAllocator.allocate(insertId);
+			if (p != nullptr) {
+				Vector2d pos = TerrainManager::convertScreenPixelToWorldCoord(logicIO.mousePos);
+				entityManager.insert(p, pos);
+			}
 		}
-		mousePosBeforePress = logicIO.mousePos;
+		else if (insertingBlock) {
+			Vector2i pos = TerrainManager::convertScreenPixelToWorldBlockCoord(logicIO.mousePos);
+			terrainManager.setBlock(pos, insertId);
+		}
+	}
+
+	if (!imgui::GetIO().WantCaptureKeyboard&&logicIO.keyboardState[Keyboard::Delete] == LogicIO::JustReleased) {
+		for (auto& i : selectedEntities)
+			entityManager.getEntityMapList().erase(i);
+		selectedEntities.clear();
 	}
 
 	if (!logicPaused) {
@@ -116,6 +180,17 @@ void MapEditorScene::updateLogic(RenderWindow& win) {
 
 ////////////////////////////////////////
 void MapEditorScene::runImGui() {
+	auto pushBoolText = [](bool value, string trueText = "True", string falseText = "False", bool callSameLine = true) {
+		if (callSameLine)
+			imgui::SameLine();
+		if (value)
+			imgui::PushStyleColor(ImGuiCol_Text, Color::Green);
+		else
+			imgui::PushStyleColor(ImGuiCol_Text, Color::Red);
+		imgui::Text("%s", value ? trueText.c_str() : falseText.c_str());
+		imgui::PopStyleColor();
+	};
+
 	float menuBarHeight = .0f;
 	if (imgui::BeginMainMenuBar()) {
 		menuBarHeight = imgui::GetWindowSize().y;
@@ -125,6 +200,22 @@ void MapEditorScene::runImGui() {
 
 	imgui::SetNextWindowPos(ImVec2(8.0f, 8.0f + menuBarHeight), ImGuiCond_Always);
 	if (imgui::Begin("Controls", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove)) {
+		if (imgui::BeginMenu("New A Map...")) {
+			static int sizes[2];
+			static char blockName[128] = { "stone" };
+			imgui::InputInt2("Size (Chunks, WidthxHeight)", sizes);
+			imgui::InputText("Fill Block Id", blockName, 128);
+			pushBoolText(blockAllocator.allocs.find(blockName) != blockAllocator.allocs.end(),
+						 "Valid", "Nullptr");
+			if (imgui::Button("Create!", ImVec2(-1, 0))) {
+				terrainManager.chunks.clear();
+				terrainManager.chunkCount = Vector2i(sizes[0], sizes[1]);
+				for (int i = 0; i < sizes[0]; i++)
+					for (int j = 0; j < sizes[1]; j++)
+						terrainManager.loadEmptyChunk(Vector2i(i, j), blockName);
+			}
+			imgui::EndMenu();
+		}
 		if (imgui::BeginMenu("Load File...                  ")) {
 			imgui::Text("Filename: ");
 			static char buf[128];
@@ -144,26 +235,11 @@ void MapEditorScene::runImGui() {
 			imgui::EndMenu();
 		}
 		imgui::Separator();
-		if (logicPaused) {
-			imgui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
-			if (imgui::Selectable("Logic:", false))
-				logicPaused = !logicPaused;
-			imgui::PopItemFlag();
-			imgui::SameLine();
-			imgui::PushStyleColor(ImGuiCol_Text, Color::Red);
-			imgui::Text("PAUSED");
-			imgui::PopStyleColor();
-		}
-		else {
-			imgui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
-			if (imgui::Selectable("Logic:", false))
-				logicPaused = !logicPaused;
-			imgui::PopItemFlag();
-			imgui::SameLine();
-			imgui::PushStyleColor(ImGuiCol_Text, Color::Green);
-			imgui::Text("RUNNING");
-			imgui::PopStyleColor();
-		}
+		imgui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+		if (imgui::Selectable("Logic:", false))
+			logicPaused = !logicPaused;
+		imgui::PopItemFlag();
+		pushBoolText(!logicPaused, "RUNNING", "PAUSED");
 		imgui::Separator();
 		static float dummy = 48.0f;
 		imgui::PushItemWidth(200);
@@ -195,17 +271,6 @@ void MapEditorScene::runImGui() {
 			app->switchScene("TestScene");
 	}
 	imgui::End();
-
-	auto pushBoolText = [](bool value, bool callSameLine = true) {
-		if (callSameLine)
-			imgui::SameLine();
-		if (value)
-			imgui::PushStyleColor(ImGuiCol_Text, Color::Green);
-		else
-			imgui::PushStyleColor(ImGuiCol_Text, Color::Red);
-		imgui::Text("%s", value ? "True" : "False");
-		imgui::PopStyleColor();
-	};
 
 	inspectingEntities.clear();
 	auto pushEntityTreeNode = [&](Uuid id, bool defaultOpen = false) {
@@ -261,11 +326,11 @@ void MapEditorScene::runImGui() {
 						static char buf[128];
 						strcpy(buf, i.second.getDataString().c_str());
 						imgui::InputText(i.first.c_str(), buf, 128);
+						i.second.getDataString() = buf;
 					}
 					else if (i.second.getType() == Data::Bool) {
 						imgui::Selectable(i.first.c_str(), &i.second.getDataBool(), 0, ImVec2(0, buttonHeight));
-						imgui::SameLine();
-						pushBoolText(i.second.getDataBool(), false);
+						pushBoolText(i.second.getDataBool());
 					}
 					else if (i.second.getType() == Data::Uuid)
 						imgui::Text("{%s} :%s", i.second.getDataUuid().toString(), i.first.c_str());
@@ -279,11 +344,6 @@ void MapEditorScene::runImGui() {
 				imgui::TreePop();
 			}
 			imgui::TreePop();
-		}
-		else {
-			auto i = inspectingEntities.find(id);
-			if (i != inspectingEntities.end())
-				inspectingEntities.erase(i);
 		}
 	};
 	if (imgui::Begin("Entity", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
@@ -304,8 +364,35 @@ void MapEditorScene::runImGui() {
 	}
 	imgui::End();
 
-	if (imgui::Begin("Insert Or Assign")) {
-
+	if (imgui::Begin("Insert", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+		if (imgui::TreeNodeEx("Insert Entitiy", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed)) {
+			static char entityName[128];
+			imgui::InputText("Entity Id", entityName, 128);
+			pushBoolText(entityAllocator.allocs.find(entityName) != entityAllocator.allocs.end(),
+						 "Valid", "Invalid");
+			imgui::Selectable("Inserting Entity", &insertingEntity);
+			if (insertingEntity) {
+				insertingBlock = false;
+				insertId = entityName;
+			}
+			pushBoolText(insertingEntity, "ON", "OFF");
+			imgui::TreePop();
+		}
+		if (imgui::TreeNodeEx("Set Block", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed)) {
+			static char blockName[128];
+			imgui::InputText("Block Id", blockName, 128);
+			pushBoolText(blockAllocator.allocs.find(blockName) != blockAllocator.allocs.end(),
+						 "Valid", "Nullptr");
+			imgui::Selectable("Setting Block", &insertingBlock);
+			if (insertingBlock) {
+				insertingEntity = false;
+				insertId = blockName;
+			}
+			pushBoolText(insertingBlock, "ON", "OFF");
+			if (imgui::Button("Update Lighting", ImVec2(-1, 0)))
+				terrainManager._updateLighting();
+			imgui::TreePop();
+		}
 	}
 	imgui::End();
 }

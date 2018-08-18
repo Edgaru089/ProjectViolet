@@ -34,8 +34,10 @@ private:
 
 	unordered_set<Uuid, UuidHasher> selectedEntities;
 	unordered_set<Uuid, UuidHasher> inspectingEntities;
+	Vector2i selectedBlock;
 
-	
+	bool insertingEntity, insertingBlock;
+	string insertId;
 };
 
 
