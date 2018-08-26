@@ -177,12 +177,6 @@
     <ClInclude Include="TestScene.Impl.hpp">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="FallingSand.hpp">
-      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="FallingSand.Impl.hpp">
-      <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="ItemEntity.hpp">
       <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
     </ClInclude>
@@ -387,9 +381,6 @@
     <ClInclude Include="Gravel.hpp">
       <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
     </ClInclude>
-    <ClInclude Include="Gravel.Impl.hpp">
-      <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
-    </ClInclude>
     <ClInclude Include="Ladder.hpp">
       <Filter>Game\Blocks&amp;Entities&amp;Items\Blocks\Blocks</Filter>
     </ClInclude>
@@ -437,6 +428,15 @@
     </ClInclude>
     <ClInclude Include="MapEditorScene.Impl.hpp">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SHA-256.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryObject.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items</Filter>
+    </ClInclude>
+    <ClInclude Include="InventoryObject.Impl.hpp">
+      <Filter>Game\Blocks&amp;Entities&amp;Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

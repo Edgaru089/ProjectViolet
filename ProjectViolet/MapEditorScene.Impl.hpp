@@ -9,7 +9,7 @@
 
 ////////////////////////////////////////
 void MapEditorScene::preWindowInitalaize() {
-	background.loadFromFile(assetManager.getAssetFilename("background_stone"));
+	assetManager.getAssetData("background_stone").load(background);
 	background.setRepeated(true);
 }
 
@@ -304,8 +304,7 @@ void MapEditorScene::runImGui() {
 					}
 					else if (type == Data::Bool) {
 						imgui::Checkbox("Bool##InputDataBool", &d.getDataBool());
-						imgui::SameLine();
-						pushBoolText(d.getDataBool(), false);
+						pushBoolText(d.getDataBool());
 					}
 					if (imgui::Button("Add!", ImVec2(-1, 0))) {
 						e->getDataset().getDatasets().insert(make_pair(namebuf, d));
@@ -392,6 +391,211 @@ void MapEditorScene::runImGui() {
 			if (imgui::Button("Update Lighting", ImVec2(-1, 0)))
 				terrainManager._updateLighting();
 			imgui::TreePop();
+		}
+	}
+	imgui::End();
+
+	if (imgui::Begin("Inventory Manager", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static int which = 0;
+		static int invSize[2] = { -1, -1 };
+		imgui::RadioButton("Entity", &which, 0);
+		imgui::SameLine(.0f, 10.0f);
+		imgui::RadioButton("Block", &which, 1);
+		imgui::InputInt2("Inventory Size (LxC)", invSize);
+		Dataset* data = nullptr;
+		if (which == 0) { // Entity
+			Uuid id;
+			if (selectedEntities.size() == 1)
+				id = *selectedEntities.begin();
+			imgui::Text("Selected Entity: %s", selectedEntities.size() == 0 ? "None!" : (selectedEntities.size() > 1 ? "Too Many!" : ('{' + id.toString() + '}').c_str()));
+			if (id != Uuid::nil()) {
+				auto e = entityManager.getEntity(id);
+				try {
+					auto& inv = dynamic_cast<InventoryObject&>(*e);
+					invSize[0] = inv.getInventorySize().x;
+					invSize[1] = inv.getInventorySize().y;
+				}
+				catch (bad_cast) {}
+				data = &e->getDataset();
+			}
+		}
+		else if (which == 1) { // Block
+			if (selectedBlock == Vector2i(-1, -1))
+				imgui::Text("Selected Block: None!");
+			else {
+				auto b = terrainManager.getBlock(selectedBlock);
+				imgui::Text("Selected Block: (%d, %d)", selectedBlock.x, selectedBlock.y);
+				pushBoolText(b != nullptr, "Valid", "Invalid");
+				if (b != nullptr) {
+					try {
+						auto& inv = dynamic_cast<InventoryObject&>(*b);
+						invSize[0] = inv.getInventorySize().x;
+						invSize[1] = inv.getInventorySize().y;
+					}
+					catch (bad_cast) {}
+					data = &b->getDataset();
+				}
+			}
+		}
+		if (data != nullptr) {
+			// borrow code from InGameUI
+			imgui::PushStyleColor(ImGuiCol_ModalWindowDarkening, Color(0, 0, 0, 128));
+			imgui::PushStyleColor(ImGuiCol_Button, Color::Transparent);
+			imgui::PushStyleColor(ImGuiCol_ButtonHovered, Color(255, 255, 255, 64));
+			imgui::PushStyleColor(ImGuiCol_ButtonActive, Color(255, 255, 255, 48));
+			imgui::PushStyleColor(ImGuiCol_FrameBg, Color(0, 0, 0, 128));
+			imgui::PushStyleColor(ImGuiCol_PopupBg, Color(0, 0, 0, 128));
+			imgui::PushStyleColor(ImGuiCol_TitleBgActive, imgui::GetStyleColorVec4(ImGuiCol_PopupBg));
+			imgui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.0f);
+			imgui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+			imgui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+			Dataset& dataset = *data;
+			static bool contextMenuOpen = false;
+			bool thisFrameHasContextMenu = false;
+			for (int i = 0; i < invSize[0]; i++) {
+				for (int j = 0; j < invSize[1]; j++) {
+					if (dataset.getDatasets().find(to_string(i) + to_string(j) + "item_name") == dataset.getDatasets().end())
+						continue;
+
+					string slotPrefix = to_string(i) + to_string(j);
+					string slotName = dataset[to_string(i) + to_string(j) + "item_name"].getDataString();
+					int slotCount = dataset[to_string(i) + to_string(j) + "count"].getDataInt();
+
+					TextureInfo info = textureManager.getTextureInfo(dataset[to_string(i) + to_string(j) + "item_name"].getDataString());
+					if (!info.vaild)
+						info = textureManager.getTextureInfo("none");
+					shared_ptr<Item> item = nullptr;
+					if (slotName.size() > 5)
+						item = itemAllocator.allocate(slotName.substr(5), dataset, to_string(i) + to_string(j), false);
+
+					int maxItemsThisSlot = maxItemsPerSlot;
+					if (item != nullptr)
+						maxItemsThisSlot = item->getMaxItemsPerSlotCount();
+
+					if (j != 0)
+						imgui::SameLine();
+					imgui::PushID(i * 9 + j);
+					bool mapMutated = false;
+					imgui::ImageButton(info.getSprite(), Vector2f(32, 32), 3);
+
+					if (info.id != "none"&&slotCount != 1) {
+						ImVec2 pos = imgui::GetItemRectMin(); pos.x += 2.0;
+						imgui::GetCurrentWindow()->DrawList->AddText(pos, ImU32(0xFFFFFFFF), StringParser::toString(slotCount).c_str());
+					}
+
+					if (FloatRect(imgui::GetItemRectMin(), imgui::GetItemRectSize()).contains(Vector2f(logicIO.mousePos))) {
+						if (logicIO.mouseState[Mouse::Right] == LogicIO::JustPressed) {
+							imgui::OpenPopup("ItemContextMenu");
+						}
+						if (!contextMenuOpen&&info.id != "none") {
+							imgui::BeginTooltip();
+							imgui::TextUnformatted(text.get(slotName + ".name"));
+							const string& desc = text.getstr(slotName + ".desc");
+							if (desc != "") {
+								imgui::PushStyleColor(ImGuiCol_Text, Color(220, 220, 220));
+								imgui::TextUnformatted(desc.c_str());
+								imgui::PopStyleColor();
+							}
+							imgui::PushStyleColor(ImGuiCol_Text, imgui::GetStyleColorVec4(ImGuiCol_TextDisabled));
+							imgui::Text(text.get("inventory.maxcount"), maxItemsThisSlot);
+							imgui::PopStyleColor();
+							imgui::EndTooltip();
+						}
+					}
+
+					if (imgui::BeginPopup("ItemContextMenu")) {
+						thisFrameHasContextMenu = true;
+						imgui::PopStyleColor(7);
+						imgui::PopStyleVar(2);
+						static char charbuf[256] = {};
+						strcpy(charbuf, dataset[to_string(i) + to_string(j) + "item_name"].getDataString().c_str());
+						imgui::InputText("Item Id", charbuf, 256);
+						dataset[to_string(i) + to_string(j) + "item_name"].getDataString() = charbuf;
+						imgui::InputInt("Count", &dataset[to_string(i) + to_string(j) + "count"].getDataInt());
+						if (imgui::TreeNodeEx("Other Datasets", ImGuiTreeNodeFlags_DefaultOpen)) {
+							if (imgui::BeginMenu("Add Data...")) {
+								static Data d;
+								static int type = 0;
+								imgui::Combo("Data Type", &type, "Integer\0String\0Bool\0\0");
+								static char namebuf[64];
+								imgui::InputText("Data Id String", namebuf, 64);
+								d.setType((Data::DataType)type);
+								if (type == Data::Integer)
+									imgui::InputInt("Integer##InputDataInt", &d.getDataInt());
+								else if (type == Data::String) {
+									static char buf[128];
+									strcpy(buf, d.getDataString().c_str());
+									imgui::InputText("String##InputDataString", buf, 128);
+								}
+								else if (type == Data::Bool) {
+									imgui::Checkbox("Bool##InputDataBool", &d.getDataBool());
+									pushBoolText(d.getDataBool());
+								}
+								if (imgui::Button("Add! (With Prefix Added)", ImVec2(-1, 0))) {
+									dataset.getDatasets().insert(make_pair(slotPrefix + namebuf, d));
+									namebuf[0] = '\0';
+									d = Data();
+									type = 0;
+								}
+								imgui::EndMenu();
+							}
+							for (auto j = dataset.getDatasets().begin(); j != dataset.getDatasets().end();) {
+								if (j->first.substr(0, slotPrefix.size()) != slotPrefix || j->first == slotPrefix + "item_name" || j->first == slotPrefix + "count") {
+									j++;
+									continue;
+								}
+								auto& i = *j;
+								static float buttonHeight = .0f;
+								if (i.second.getType() == Data::Integer)
+									imgui::InputInt(i.first.substr(slotPrefix.size()).c_str(), &i.second.getDataInt());
+								else if (i.second.getType() == Data::String) {
+									static char buf[128];
+									strcpy(buf, i.second.getDataString().c_str());
+									imgui::InputText(i.first.substr(slotPrefix.size()).c_str(), buf, 128);
+									i.second.getDataString() = buf;
+								}
+								else if (i.second.getType() == Data::Bool) {
+									imgui::Selectable(i.first.substr(slotPrefix.size()).c_str(), &i.second.getDataBool(), 0, ImVec2(0, buttonHeight));
+									pushBoolText(i.second.getDataBool());
+								}
+								else if (i.second.getType() == Data::Uuid)
+									imgui::Text("{%s} :%s", i.second.getDataUuid().toString(), i.first.substr(slotPrefix.size()).c_str());
+								imgui::SameLine(16.0f);
+								if (imgui::Button(("X##Remove" + i.first.substr(slotPrefix.size())).c_str()))
+									j = dataset.getDatasets().erase(j);
+								else
+									j++;
+								if (imgui::IsItemHovered()) {
+									imgui::BeginTooltip();
+									imgui::Text("Remove This Data Entry");
+									imgui::EndTooltip();
+								}
+								buttonHeight = imgui::GetItemRectSize().y;
+							}
+
+							imgui::TreePop();
+						}
+						imgui::EndPopup();
+
+						imgui::PushStyleColor(ImGuiCol_ModalWindowDarkening, Color(0, 0, 0, 128));
+						imgui::PushStyleColor(ImGuiCol_Button, Color::Transparent);
+						imgui::PushStyleColor(ImGuiCol_ButtonHovered, Color(255, 255, 255, 64));
+						imgui::PushStyleColor(ImGuiCol_ButtonActive, Color(255, 255, 255, 48));
+						imgui::PushStyleColor(ImGuiCol_FrameBg, Color(0, 0, 0, 128));
+						imgui::PushStyleColor(ImGuiCol_PopupBg, Color(0, 0, 0, 128));
+						imgui::PushStyleColor(ImGuiCol_TitleBgActive, imgui::GetStyleColorVec4(ImGuiCol_PopupBg));
+						imgui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.0f);
+						imgui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+					}
+
+					imgui::PopID();
+				}
+			}
+			imgui::PopStyleColor(7);
+			imgui::PopStyleVar(2);
+			imgui::PopItemFlag();
+
+			contextMenuOpen = thisFrameHasContextMenu;
 		}
 	}
 	imgui::End();

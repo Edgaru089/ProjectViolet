@@ -23,7 +23,7 @@ void App::initalaizePreWindow() {
 	sceneMapper["MapEditorScene"] = new MapEditorScene();
 
 	mlog << "[App] Initalaizing Asset Systems..." << dlog;
-	assetManager.loadListFile();
+	assetManager.loadAssetPack();
 	textureManager.bindTexture();
 
 	for (pair<const string, Scene*>& i : sceneMapper)

@@ -325,31 +325,52 @@ void PlayerEntity::jumpOffLadder() {
 ////////////////////////////////////////
 bool PlayerEntity::collectItem(ItemEntity& item) {
 	//TODO Collect Item
+	if (item.throwCooldownMilli() > 0)
+		return false;
 
-	// First attempt to merge with items which exist
-	for (int i = 0; i < 4; i++)
-		for (int j = 0; j < 9; j++) {
-			Dataset& d = getDataset();
-			if (d[to_string(i) + to_string(j) + "count"].getDataInt() < maxItemsPerSlot && d[to_string(i) + to_string(j) + "item_name"].getDataString() == item.getItemName()) {
-				d[to_string(i) + to_string(j) + "count"].getDataInt()++;
-				item.kill();
-				return true;
-			}
-		}
-	// Then try to place at an empty slot
-	for (int i = 0; i < 4; i++)
-		for (int j = 0; j < 9; j++) {
-			Dataset& d = getDataset();
-			if (d[to_string(i) + to_string(j) + "item_name"].getDataString() == "") {
-				d[to_string(i) + to_string(j) + "item_name"].setData(item.getItemName());
-				d[to_string(i) + to_string(j) + "count"].getDataInt() = 1;
-				for (auto& i : item.getDataset().getDatasets())
-					d.getDatasets().insert(i);
-				item.kill();
-				return true;
-			}
-		}
+	string name = item.getItemName();
+	int& count = item.count();
 
-	return false;
+	bool collected = false;
+	do {
+		collected = false;
+		Dataset& d = datasets;
+		// First attempt to merge with items which exist
+		for (int i = 0; i < 4 && !collected; i++)
+			for (int j = 0; j < 9 && !collected; j++) {
+				string prefix = to_string(i) + to_string(j);
+				if (d[prefix + "item_name"].getDataString() == name) {
+					int maxItemCnt = maxItemsPerSlot;
+					auto item = itemAllocator.allocate(name.substr(5), d, prefix);
+					if (item != nullptr)
+						maxItemCnt = item->getMaxItemsPerSlotCount();
+					if (d[prefix + "count"].getDataInt() < maxItemCnt) {
+						d[prefix + "count"].getDataInt()++;
+						count--;
+						collected = true;
+					}
+				}
+			}
+		// Then try to place at an empty slot
+		for (int i = 0; i < 4 && !collected; i++)
+			for (int j = 0; j < 9 && !collected; j++) {
+				string prefix = to_string(i) + to_string(j);
+				if (d[prefix + "item_name"].getDataString() == "") {
+					d[prefix + "item_name"].setData(name);
+					d[prefix + "count"].getDataInt() = 1;
+					for (auto& i : item.getDataset().getDatasets())
+						d.getDatasets().insert(make_pair(prefix + i.first, i.second));
+					count--;
+					collected = true;
+				}
+			}
+	} while (collected&&item.count() > 0);
+
+	if (item.count() <= 0) {
+		item.kill();
+		return true;
+	}
+	else
+		return false;
 }
 

@@ -75,16 +75,13 @@ public:
 	Uuid getUuid() { return uuid; }
 	void setUuid(Uuid id) { uuid = id; }
 
-	Data& getData(string id) {
-		return datasets[id];
-	}
+	Data& getData(string id) { return datasets[id]; }
+	Dataset& getDataset() { return datasets; }
 
 	template<typename Type>
 	void setData(string id, Type data) {
 		datasets[id].setData(data);
 	}
-
-	Dataset& getDataset() { return datasets; }
 
 	virtual void _onCreate() {}
 	virtual void _updateLogic() {}

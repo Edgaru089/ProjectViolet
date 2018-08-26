@@ -28,10 +28,16 @@ void TestScene::preWindowInitalaize() {
 	novelGameSystem.preInitalaize();
 
 	mlog << "[TestScene] Loading Fonts..." << dlog;
+	ImFontConfig config;
+	config.RasterizerMultiply = 2.5f;
+	strcpy(config.Name, "courier_new");
+	config.OversampleH = 4;
+	config.OversampleV = 3;
 	//imgui::GetIO().Fonts->AddFontFromFileTTF(assetManager.getAssetFilename("font_minecraft").c_str(),
 	//	16, nullptr, imgui::GetIO().Fonts->GetGlyphRangesDefault());
-	//imgui::GetIO().Fonts->AddFontFromFileTTF(assetManager.getAssetFilename("courier_new").c_str(),
-	//	13, nullptr, imgui::GetIO().Fonts->GetGlyphRangesDefault());
+	AssetManager::Data d = assetManager.getAssetData("courier_new");
+	imgui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<void*>(d.data), d.size,
+		13, &config, imgui::GetIO().Fonts->GetGlyphRangesDefault());
 	//imgui::GetIO().Fonts->AddFontFromFileTTF(assetManager.getAssetFilename("courier_new_bold").c_str(),
 	//	13, nullptr, imgui::GetIO().Fonts->GetGlyphRangesDefault());
 	//imgui::GetIO().Fonts->AddFontFromFileTTF(assetManager.getAssetFilename("source_han_sans").c_str(),
@@ -41,7 +47,7 @@ void TestScene::preWindowInitalaize() {
 	mlog << "[TestScene] Updating Font Textures..." << dlog;
 	imgui::SFML::UpdateFontTexture();
 
-	background.loadFromFile(assetManager.getAssetFilename("background_stone"));
+	assetManager.getAssetData("background_stone").load(background);
 	background.setRepeated(true);
 
 	win.setKeyRepeatEnabled(false);
@@ -258,6 +264,13 @@ void TestScene::updateLogic(RenderWindow & win) {
 				gameIO.degreeAngle += 360.0;
 		}
 
+		terrainManager.updateLogic();
+		particleSystem.updateLogic();
+		entityManager.updateLogic();
+		playerInventory.updateLogic();
+
+		novelGameSystem.updateLogic();
+
 		// Manage keys and game/player controls
 		// Mouse controls
 		if (!imgui::GetIO().WantCaptureMouse && logicIO.hasFocus && (logicIO.mouseState[Mouse::Left] == LogicIO::JustPressed))
@@ -350,13 +363,6 @@ void TestScene::updateLogic(RenderWindow & win) {
 		if (!imgui::GetIO().WantCaptureKeyboard && logicIO.hasFocus &&
 			Keyboard::isKeyPressed(Keyboard::Space))
 			localPlayer->jump();
-
-		terrainManager.updateLogic();
-		particleSystem.updateLogic();
-		entityManager.updateLogic();
-		playerInventory.updateLogic();
-
-		novelGameSystem.updateLogic();
 	}
 	else // Excilpty handle the Escape key to support escaping from pause screen using Esc key
 		handleKeyState(logicIO.keyboardState[Keyboard::Escape], Keyboard::isKeyPressed(Keyboard::Escape));
@@ -502,20 +508,23 @@ void TestScene::runImGui() {
 			}
 		}
 
-		//imgui::Text("Item In Hand");
-		//imgui::Text("  CursorId: %d", playerInventory.cursorId);
-		//Dataset& slot = playerInventory.slots[0][playerInventory.cursorId];
-		//for (auto& i : slot.getDatasets()) {
-		//	imgui::Text("  %s:", i.first.c_str()); imgui::SameLine();
-		//	if (i.second.getType() == Data::Integer)
-		//		imgui::Text("%d", i.second.getDataInt());
-		//	else if (i.second.getType() == Data::String)
-		//		imgui::Text("%s", i.second.getDataString().c_str());
-		//	else if (i.second.getType() == Data::Bool)
-		//		pushBoolText(i.second.getDataBool(), false);
-		//	else if (i.second.getType() == Data::Uuid)
-		//		imgui::Text("{%s}", i.second.getDataUuid().toString());
-		//}
+		imgui::Text("Item In Hand");
+		imgui::Text("  CursorId: %d", playerInventory.cursorId);
+		string prefix = '0' + to_string(playerInventory.cursorId);
+		Dataset& data = localPlayer->getDataset();
+		for (auto& i : data.getDatasets()) {
+			if (i.first.substr(0, prefix.size()) == prefix) {
+				imgui::Text("  %s:", i.first.substr(prefix.size()).c_str()); imgui::SameLine();
+				if (i.second.getType() == Data::Integer)
+					imgui::Text("%d", i.second.getDataInt());
+				else if (i.second.getType() == Data::String)
+					imgui::Text("%s", i.second.getDataString().c_str());
+				else if (i.second.getType() == Data::Bool)
+					pushBoolText(i.second.getDataBool(), false);
+				else if (i.second.getType() == Data::Uuid)
+					imgui::Text("{%s}", i.second.getDataUuid().toString());
+			}
+		}
 
 		imgui::Text("TerrainRender:  %d verts (%d tri)",
 			terrainListSize, terrainListSize / 3);

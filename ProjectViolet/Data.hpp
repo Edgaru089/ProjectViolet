@@ -118,12 +118,15 @@ public:
 
 	Data& operator [] (string id) { return datasets[id]; }
 
-	unordered_map<string, Data>& getDatasets() { return datasets; }
+	auto& getDatasets() { return datasets; }
 
 private:
 
+#ifdef DATASET_USE_MAP_INSTED_OF_UNORDERED_MAP
+	map<string, Data> datasets;
+#else
 	unordered_map<string, Data> datasets;
-
+#endif
 };
 
 Packet& operator << (Packet& packet, Dataset& datas) {

@@ -108,7 +108,7 @@ public:
 	void setLevel(Log::LogLevel level) { this->level = level; }
 	void flush(Log& log) { logout(log); clear(); }
 	void logout(Log& log) { log(buffer, level); }
-	void clear() { buffer = ""; }
+	void clear() { buffer.clear(); }
 
 private:
 	string buffer;

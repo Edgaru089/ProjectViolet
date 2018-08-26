@@ -10,6 +10,7 @@ public:
 	const Time stringCharAppearTime = milliseconds(20);
 
 	void loadFromScriptFile(const string& filename);
+	void loadFromScriptInMemory(const void* data, Uint64 size);
 	void start();
 
 	void click();
@@ -19,6 +20,8 @@ public:
 	void runImGui();
 
 private:
+	void _loadFromIStream(istream& in);
+
 	string strid;
 
 	bool running, valid = false, paused;
@@ -43,6 +46,7 @@ public:
 	void preInitalaize();
 
 	void loadScriptFromFile(const string& filename, const string& id);
+	void loadScriptFromMemory(const void* data, Uint64 size, const string& id);
 	void start(const string& id);
 
 	void updateLogic();

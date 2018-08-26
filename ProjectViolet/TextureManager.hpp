@@ -3,6 +3,7 @@
 #include <map>
 
 #include "Main.hpp"
+#include "AssetManager.hpp"
 
 
 struct TextureInfo {
@@ -33,8 +34,8 @@ public:
 
 	// Image is copied
 	void addImage(string id, Image& image);
-	void addImage(string id, string filename);
-	void addImage(string id, string filename, IntRect textureRect);
+	void addImage(string id, AssetManager::Data data);
+	void addImage(string id, AssetManager::Data data, IntRect textureRect);
 
 	void bindTexture();
 

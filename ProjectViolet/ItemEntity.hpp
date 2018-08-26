@@ -25,12 +25,10 @@ public:
 	Vector2d getSize() { return Vector2d(0.6, 0.6); }
 
 	bool& pickedUp() { return getData("picked_up").getDataBool(); }
+	int& count() { return getData("count").getDataInt(); }
+	int& throwCooldownMilli() { return getData("throw_cooldown").getDataInt(); }
 
 	void _updateLogic() override;
-
-protected:
-
-
 
 };
 

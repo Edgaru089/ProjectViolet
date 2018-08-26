@@ -6,22 +6,17 @@
 
 
 ////////////////////////////////////////
-void NovelGameParagraph::loadFromScriptFile(const string& filename) {
+void NovelGameParagraph::_loadFromIStream(istream& in) {
 	valid = false;
-	ifstream fin(filename);
-	string str;
-	if (fin.bad()) {
-		mlog << Log::Error << "[NovelGameParagraph] File \"" << filename << "\" open failed" << dlog;
-		return;
-	}
 	// UTF-8 Signature (EF BB BF)
-	if (fin.get() == 0xEF)
-		fin.ignore(2);
+	if (in.get() == 0xEF)
+		in.ignore(2);
 	else
-		fin.unget();
-	while (!getline(fin, str).eof()) {
-		if (fin.bad()) {
-			mlog << Log::Error << "[NovelGameParagraph] File \"" << filename << "\": Bad IO stream" << dlog;
+		in.unget();
+	string str;
+	while (!getline(in, str).eof()) {
+		if (in.bad()) {
+			mlog << Log::Error << "[NovelGameParagraph] File Failed: Bad IO stream" << dlog;
 			return;
 		}
 		if (str == "")
@@ -29,9 +24,34 @@ void NovelGameParagraph::loadFromScriptFile(const string& filename) {
 		size_t pos = str.find('#');
 		if (pos == string::npos)
 			commands.push_back(make_pair(str, ""));
-		else
-			commands.push_back(make_pair(str.substr(0, pos), str.substr(pos + 1)));
+		else {
+			string param = str.substr(pos + 1);
+			if (param[param.size() - 1] == '\r')
+				param.pop_back();
+			commands.push_back(make_pair(str.substr(0, pos), param));
+		}
 	}
+	valid = true;
+}
+
+
+////////////////////////////////////////
+void NovelGameParagraph::loadFromScriptFile(const string& filename) {
+	valid = false;
+	ifstream fin(filename);
+	if (fin.bad()) {
+		mlog << Log::Error << "[NovelGameParagraph] File \"" << filename << "\" open failed" << dlog;
+		return;
+	}
+	_loadFromIStream(fin);
+}
+
+
+////////////////////////////////////////
+void NovelGameParagraph::loadFromScriptInMemory(const void* data, Uint64 size) {
+	valid = false;
+	istringstream strin(string((const char*)data, size));
+	_loadFromIStream(strin);
 	valid = true;
 }
 
@@ -82,7 +102,7 @@ void NovelGameParagraph::runUntilPause() {
 			else {
 				if (speaker == nullptr)
 					speaker = make_shared<Texture>();
-				speaker->loadFromFile(assetManager.getAssetFilename(param));
+				assetManager.getAssetData(param).load(*speaker);
 			}
 		}
 		else if (comm == "SPEAKERFILE" || comm == "IMAGEFILE") {
@@ -207,13 +227,14 @@ u8R"(匕刁丐歹戈夭仑讥冗邓艾夯凸卢叭叽皿凹囚矢乍尔冯玄邦
 	builder.BuildRanges(&range);
 
 	ImFontConfig config;
-	config.PixelSnapH = 1;
+	strcpy(config.Name, "novelgame_font");
 	config.RasterizerMultiply = 1.2f;
 	config.OversampleH = 3;
 	config.OversampleV = 1.5;
 
-	font = imgui::GetIO().Fonts->AddFontFromFileTTF(
-		assetManager.getAssetFilename("novelgame_font").c_str(),
+	AssetManager::Data d = assetManager.getAssetData("novelgame_font");
+	font = imgui::GetIO().Fonts->AddFontFromMemoryTTF(
+		const_cast<void*>(d.data), d.size,
 		/*"simsun.ttc",*/
 		28.0f,
 		&config,
@@ -230,12 +251,13 @@ u8R"(匕刁丐歹戈夭仑讥冗邓艾夯凸卢叭叽皿凹囚矢乍尔冯玄邦
 	mlog << "[NovelGameSystem] Loading Novelgame Scripts..." << dlog;
 	for (auto& i : assetManager.getAssetMapper()) {
 		if (i.second.type == "NOVELGAME_SCRIPT") {
-			const string& id = i.second.strid, filename = i.second.filename;
+			const string& id = i.second.strid;
+			AssetManager::Data d = assetManager.getAssetData(id);
 			size_t pos = id.find('_');
 			if (pos != string::npos)
-				loadScriptFromFile(filename, id.substr(pos + 1));
+				loadScriptFromMemory(d.data, d.size, id.substr(pos + 1));
 			else
-				loadScriptFromFile(filename, id);
+				loadScriptFromMemory(d.data, d.size, id);
 		}
 	}
 }
@@ -249,6 +271,24 @@ void NovelGameSystem::loadScriptFromFile(const string& filename, const string& i
 	auto i = paragraphs.insert(make_pair(id, NovelGameParagraph())).first;
 	auto& para = i->second;
 	para.loadFromScriptFile(filename);
+	if (!para.valid) {
+		mlog << Log::Error << "[NovelGameSystem] Paragraph returned error upon loading" << dlog;
+		paragraphs.erase(i);
+	}
+	para.strid = id;
+	para.font = font;
+	mlog << "[NovelGameSystem] Loaded " << para.commands.size() << " commands" << dlog;
+}
+
+
+////////////////////////////////////////
+void NovelGameSystem::loadScriptFromMemory(const void* data, Uint64 size, const string& id) {
+	mlog << "[NovelGameSystem] Loading paragraph \"" << id << "\" from memory" << dlog;
+	if (paragraphs.find(id) != paragraphs.end())
+		mlog << Log::Warning << "[NovelGameSystem] Warning: Paragraph with id \"" << id << "\" already exists, skipping" << dlog;
+	auto i = paragraphs.insert(make_pair(id, NovelGameParagraph())).first;
+	auto& para = i->second;
+	para.loadFromScriptInMemory(data, size);
 	if (!para.valid) {
 		mlog << Log::Error << "[NovelGameSystem] Paragraph returned error upon loading" << dlog;
 		paragraphs.erase(i);

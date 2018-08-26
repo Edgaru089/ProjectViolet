@@ -4,7 +4,7 @@
 
 class BowItem :public Item {
 public:
-	BowItem(Dataset& data, string slotDataIdPrefix) :Item(data, slotDataIdPrefix) { isLoading() = false; }
+	BowItem(Dataset& data, string slotDataIdPrefix) :Item(data, slotDataIdPrefix) {}
 	const string getItemId() override { return "bow"; }
 	int getMaxItemsPerSlotCount() override { return 1; }
 	TextureInfo getTextureInfo() override {

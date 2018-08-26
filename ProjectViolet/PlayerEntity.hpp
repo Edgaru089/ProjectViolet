@@ -3,12 +3,13 @@
 #include "Main.hpp"
 #include "Entity.hpp"
 #include "Mob.hpp"
+#include "InventoryObject.hpp"
 
 
 class ItemEntity;
 
 
-class PlayerEntity :public Mob {
+class PlayerEntity :public Mob, public InventoryObject {
 public:
 
 	PlayerEntity();
@@ -49,6 +50,8 @@ public:
 		return getPosition() + Vector2d(0, -getSize().y + 0.3);
 	}
 
+	const Vector2i getInventorySize() override { return Vector2i(4, 9); }
+
 	string getPlayerName() { return name(); };
 	string setPlayerName(string name) { this->name() = name; }
 
@@ -59,7 +62,6 @@ public:
 	void _pushTriangleVertexes(VertexArray& arr) override;
 
 	void _updateLogic() override;
-	//void _onKill() override;
 
 public:
 

@@ -5,8 +5,10 @@
 
 ////////////////////////////////////////
 void ItemEntity::_updateLogic() {
-	//Block* b = terrainManager.getBlock(TerrainManager::convertWorldPositionToBlockCoord(getPosition()));
-	//if (b != nullptr&&b->isSolid())
-		//kill();
+	if (throwCooldownMilli() > 0) {
+		throwCooldownMilli() -= logicIO.deltaTime.asMilliseconds();
+		if (throwCooldownMilli() < 0)
+			throwCooldownMilli() = 0;
+	}
 }
 

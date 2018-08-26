@@ -52,15 +52,18 @@ void InGameUIManager::runImGui() {
 	GImGui->ModalWindowDarkeningRatio = 1.0f;
 	ImGui::OpenPopup(curUI->windowTitle().c_str());
 
-	curUI->runImGui();
+	if (!curUI->showInventory())
+		curUI->runImGui();
 
-	imgui::SetNextWindowPos(
-		ImVec2(imgui::GetIO().DisplaySize.x / 2.0f, imgui::GetIO().DisplaySize.y / 2.0f),
-		ImGuiCond_Always,
-		ImVec2(0.5f, 0.5f));
 	if (curUI->showInventory()) {
+		FloatRect winRect(-1, -1, -1, -1);
+		imgui::SetNextWindowPos(
+			ImVec2(imgui::GetIO().DisplaySize.x / 2.0f, imgui::GetIO().DisplaySize.y / 2.0f),
+			ImGuiCond_Always,
+			ImVec2(0.5f, 0.5f));
 		if (imgui::BeginPopupModal(curUI->windowTitle().c_str(), nullptr,
 								   ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove)) {
+			curUI->runImGui();
 
 			_runInventoryUI();
 
@@ -79,7 +82,29 @@ void InGameUIManager::runImGui() {
 					imgui::GetOverlayDrawList()->AddText(pos, ImU32(0xFFFFFFFF), StringParser::toString(localPlayer->getDataset()["cursor_count"].getDataInt()).c_str());
 			}
 
+			winRect = FloatRect(imgui::GetWindowPos(), imgui::GetWindowSize());
+
 			imgui::EndPopup();
+		}
+		if (winRect != FloatRect(-1, -1, -1, -1) && !winRect.contains(Vector2f(logicIO.mousePos)) && logicIO.mouseState[Mouse::Left] == LogicIO::JustReleased) {
+			// Throw cursor item
+			Dataset& dataset = localPlayer->getDataset();
+			string prefix = "cursor_";
+			string& name = dataset[prefix + "item_name"].getDataString();
+			int& count = dataset[prefix + "count"].getDataInt();
+			if (!name.empty() && count > 0) {
+				shared_ptr<ItemEntity> e = make_shared<ItemEntity>(name);
+				for (auto& i : dataset.getDatasets())
+					if (i.first.substr(0, prefix.size()) == prefix)
+						e->getDataset().getDatasets().insert(make_pair(i.first.substr(prefix.size()), i.second));
+				assert(e->getData("item_name").getDataString() == name);
+				assert(e->getData("count").getDataInt() == count);
+				e->accelerateVector(2.0, gameIO.degreeAngle); // Give a velocity
+				e->throwCooldownMilli() = 1000;
+				entityManager.insert(e, localPlayer->getEyePosition() + Vector2d(.0, e->getSize().y / 2.0));
+				name.clear();
+				count = 0;
+			}
 		}
 	}
 

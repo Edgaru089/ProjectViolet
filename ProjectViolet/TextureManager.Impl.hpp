@@ -9,16 +9,16 @@ void TextureManager::addImage(string id, Image & image) {
 
 
 ////////////////////////////////////////
-void TextureManager::addImage(string id, string filename) {
+void TextureManager::addImage(string id, AssetManager::Data data) {
 	images.push_back(make_pair(id, Image()));
-	images.back().second.loadFromFile(filename);
+	images.back().second.loadFromMemory(data.data, data.size);
 }
 
 
 ////////////////////////////////////////
-void TextureManager::addImage(string id, string filename, IntRect textureRect) {
+void TextureManager::addImage(string id, AssetManager::Data data, IntRect textureRect) {
 	Image tmp; // TODO FIXME Speed this up!
-	tmp.loadFromFile(filename);
+	tmp.loadFromMemory(data.data, data.size);
 	images.push_back(make_pair(id, Image()));
 	images.back().second.create(textureRect.width, textureRect.height);
 	for (int i = 0; i < textureRect.width; i++)

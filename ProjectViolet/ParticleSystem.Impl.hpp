@@ -91,33 +91,33 @@ void PartlcleSystem::getRenderList(VertexArray& verts) {
 
 				// Left-Top
 				verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y - height),
-					Color(mask, mask, mask),
-					Vector2f(tex.textureRect.left, tex.textureRect.top)
+									Color(mask, mask, mask),
+									Vector2f(tex.textureRect.left, tex.textureRect.top)
 				));
 				// Right-Top
 				verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y - height),
-					Color(mask, mask, mask),
-					Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top)
+									Color(mask, mask, mask),
+									Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top)
 				));
 				// Left-Bottom
 				verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y),
-					Color(mask, mask, mask),
-					Vector2f(tex.textureRect.left, tex.textureRect.top + tex.textureRect.height)
+									Color(mask, mask, mask),
+									Vector2f(tex.textureRect.left, tex.textureRect.top + tex.textureRect.height)
 				));
 				// Right-Top
 				verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y - height),
-					Color(mask, mask, mask),
-					Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top)
+									Color(mask, mask, mask),
+									Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top)
 				));
 				// Left-Bottom
 				verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y),
-					Color(mask, mask, mask),
-					Vector2f(tex.textureRect.left, tex.textureRect.top + tex.textureRect.height)
+									Color(mask, mask, mask),
+									Vector2f(tex.textureRect.left, tex.textureRect.top + tex.textureRect.height)
 				));
 				// Right-Bottom
 				verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y),
-					Color(mask, mask, mask),
-					Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top + tex.textureRect.height)
+									Color(mask, mask, mask),
+									Vector2f(tex.textureRect.left + tex.textureRect.width, tex.textureRect.top + tex.textureRect.height)
 				));
 			}
 			e++;
@@ -149,6 +149,7 @@ void PartlcleSystem::emitSmoke(DoubleRect position,
 	double sizeDivisor = 1.0;
 	Time liveTimeBegin = seconds(2), liveTimeEnd = seconds(4);
 	Vector2d size = Vector2d(0.4, 0.4);
+	position.top += size.y / 2.0;
 
 	if (liveTimeBegin > liveTimeEnd)
 		swap(liveTimeBegin, liveTimeEnd);
@@ -180,19 +181,19 @@ void PartlcleSystem::emitArrowGlow(Vector2d position) {
 
 ////////////////////////////////////////
 void PartlcleSystem::emit(Vector2d position, TextureInfo texture, double sizeDivisor, double speed, int count, Time liveTimeBegin, Time liveTimeEnd, Vector2d size, double gravity) {
-		if (liveTimeBegin > liveTimeEnd)
-			swap(liveTimeBegin, liveTimeEnd);
-		position += Vector2d(.0, size.y / 2.0);
-		for (int i = 0; i < count; i++) {
-			Time live = liveTimeBegin + microseconds((liveTimeEnd - liveTimeBegin).asMicroseconds()*rand01());
-			double angle = 360.0*rand01();
+	if (liveTimeBegin > liveTimeEnd)
+		swap(liveTimeBegin, liveTimeEnd);
+	position += Vector2d(.0, size.y / 2.0);
+	for (int i = 0; i < count; i++) {
+		Time live = liveTimeBegin + microseconds((liveTimeEnd - liveTimeBegin).asMicroseconds()*rand01());
+		double angle = 360.0*rand01();
 
-			Particle p(texture, sizeDivisor, live, size, gravity);
-			p.setPosition(position);
-			p.accelerateVector(speed * 1.2 * rand01(), angle);
+		Particle p(texture, sizeDivisor, live, size, gravity);
+		p.setPosition(position);
+		p.accelerateVector(speed * 1.2 * rand01(), angle);
 
-			parts.push_back(p);
-		}
+		parts.push_back(p);
+	}
 }
 
 

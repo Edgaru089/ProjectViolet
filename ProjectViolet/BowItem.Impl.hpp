@@ -14,15 +14,14 @@ void BowItem::updateLogic() {
 bool BowItem::_onRightPressed() {
 	// TODO Check inventory and arrows before shooting
 	bool ok = false;
-	for (int i = 0; i < 4; i++)
-		for (int j = 0; j < 9; j++) {
+	for (int i = 0; i < 4 && !ok; i++)
+		for (int j = 0; j < 9 && !ok; j++) {
 			auto& slot = localPlayer->getDataset();
 			if (slot[to_string(i) + to_string(j) + "item_name"].getDataString() == "item_arrow") {
 				slot[to_string(i) + to_string(j) + "count"].getDataInt()--;
 				if (slot[to_string(i) + to_string(j) + "count"].getDataInt() <= 0)
 					slot[to_string(i) + to_string(j) + "item_name"].getDataString() = "";
 				ok = true;
-				break;
 			}
 		}
 	if (ok) {
@@ -40,5 +39,6 @@ void BowItem::_onRightReleased() {
 			(double)(loadedTimeMilli()) / 1200.0 * 0.8);
 		// TODO Force and damage change
 		ArrowEntity::shoot(stage*maxArrowDamage);
+		isLoading() = false;
 	}
 }

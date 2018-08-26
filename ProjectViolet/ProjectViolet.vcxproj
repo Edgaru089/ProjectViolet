@@ -202,12 +202,9 @@
     <ClInclude Include="EntityAllocator.hpp" />
     <ClInclude Include="EntityAllocator.Impl.hpp" />
     <ClInclude Include="EntityManager.hpp" />
-    <ClInclude Include="FallingSand.hpp" />
-    <ClInclude Include="FallingSand.Impl.hpp" />
     <ClInclude Include="GamePausedUI.Impl.hpp" />
     <ClInclude Include="GameScene.hpp" />
     <ClInclude Include="Gravel.hpp" />
-    <ClInclude Include="Gravel.Impl.hpp" />
     <ClInclude Include="GrenadeEntity.hpp" />
     <ClInclude Include="GrenadeEntity.Impl.hpp" />
     <ClInclude Include="GrenadeItem.hpp" />
@@ -226,6 +223,8 @@
     <ClInclude Include="ImplList.hpp" />
     <ClInclude Include="InGameUI.hpp" />
     <ClInclude Include="InGameUI.Impl.hpp" />
+    <ClInclude Include="InventoryObject.hpp" />
+    <ClInclude Include="InventoryObject.Impl.hpp" />
     <ClInclude Include="Item.hpp" />
     <ClInclude Include="Item.Impl.hpp" />
     <ClInclude Include="ItemAllocator.hpp" />
@@ -269,6 +268,7 @@
     <ClInclude Include="Scene.hpp" />
     <ClInclude Include="SG55.hpp" />
     <ClInclude Include="SG55.Impl.hpp" />
+    <ClInclude Include="SHA-256.hpp" />
     <ClInclude Include="Stone.hpp" />
     <ClInclude Include="StringParser.hpp" />
     <ClInclude Include="WorldFileHandler.hpp" />

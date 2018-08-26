@@ -79,7 +79,7 @@ void ArrowEntity::_onCollideEntity(shared_ptr<Entity> e) {
 		return;
 	try {
 		Mob& mob = dynamic_cast<Mob&>(*e);
-		mob.harm(damage, getPosition());
+		mob.harm(damage, getPosition(), damage*0.2);
 
 		inEntity() = true;
 		pos0 = Vector2d(posX, posY) - e->getPosition();
@@ -96,7 +96,7 @@ void ArrowEntity::_dropItem() {
 	// Borrow code from Block::_onDestory()
 	shared_ptr<ItemEntity> e = make_shared<ItemEntity>("item_arrow");
 	// Give a random velocity
-	e->accelerateVector(1.0, 180 + rand() % 180);
+	e->accelerateVector(1.0, 180.0 + 180.0*rand01());
 
 	entityManager.insert(e, getPosition());
 	kill();

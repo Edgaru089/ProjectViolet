@@ -5,7 +5,6 @@
 // Include all entity headers
 #include "TestEntity.hpp"
 #include "ItemEntity.hpp"
-#include "FallingSand.hpp"
 #include "PlayerEntity.hpp"
 #include "ArrowEntity.hpp"
 #include "BulletEntity.hpp"
@@ -18,7 +17,6 @@
 void EntityAllocator::initalaize() {
 	REGISTER_ENTITY_TYPE(TestEntity);
 	REGISTER_ENTITY_TYPE(ItemEntity);
-	REGISTER_ENTITY_TYPE(FallingSand);
 	REGISTER_ENTITY_TYPE(PlayerEntity);
 	REGISTER_ENTITY_TYPE(ArrowEntity);
 	REGISTER_ENTITY_TYPE(BulletEntity);
