@@ -3,6 +3,7 @@
 #include "Scene.hpp"
 #include "TerrainManager.hpp"
 #include "EntityManager.hpp"
+#include "MobPathFinder.hpp"
 
 
 class MapEditorScene :public Scene {
@@ -32,12 +33,15 @@ private:
 
 	Vector2i mousePosBeforePress;
 
-	unordered_set<Uuid, UuidHasher> selectedEntities;
-	unordered_set<Uuid, UuidHasher> inspectingEntities;
+	set<Uuid> selectedEntities;
+	set<Uuid> inspectingEntities;
 	Vector2i selectedBlock;
 
 	bool insertingEntity, insertingBlock;
 	string insertId;
+
+	Vector2i findPathBeginPos = Vector2i(-1, -1), findPathEndPos = Vector2i(-1, -1);
+	MobPath path;
 };
 
 

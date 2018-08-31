@@ -29,11 +29,11 @@ public:
 
 	Data getAssetData(string id);
 
-	unordered_map<string, Asset>& getAssetMapper() { return assets; }
+	map<string, Asset>& getAssetMapper() { return assets; }
 
 private:
 
-	unordered_map<string, Asset> assets;
+	map<string, Asset> assets;
 
 	vector<char> realData;
 	string sha256Digest;

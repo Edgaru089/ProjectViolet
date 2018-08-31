@@ -31,13 +31,16 @@ void TestScene::preWindowInitalaize() {
 	ImFontConfig config;
 	config.RasterizerMultiply = 2.5f;
 	strcpy(config.Name, "courier_new");
-	config.OversampleH = 4;
-	config.OversampleV = 3;
 	//imgui::GetIO().Fonts->AddFontFromFileTTF(assetManager.getAssetFilename("font_minecraft").c_str(),
 	//	16, nullptr, imgui::GetIO().Fonts->GetGlyphRangesDefault());
 	AssetManager::Data d = assetManager.getAssetData("courier_new");
 	imgui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<void*>(d.data), d.size,
-		13, &config, imgui::GetIO().Fonts->GetGlyphRangesDefault());
+		16, &config, imgui::GetIO().Fonts->GetGlyphRangesDefault());
+	d = assetManager.getAssetData("chinese_font");
+	config.RasterizerMultiply = 1.5f;
+	strcpy(config.Name, "chinese_font");
+	imgui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<void*>(d.data), d.size,
+		20, &config, getGlyphRangesCustomChinese());
 	//imgui::GetIO().Fonts->AddFontFromFileTTF(assetManager.getAssetFilename("courier_new_bold").c_str(),
 	//	13, nullptr, imgui::GetIO().Fonts->GetGlyphRangesDefault());
 	//imgui::GetIO().Fonts->AddFontFromFileTTF(assetManager.getAssetFilename("source_han_sans").c_str(),
@@ -264,13 +267,6 @@ void TestScene::updateLogic(RenderWindow & win) {
 				gameIO.degreeAngle += 360.0;
 		}
 
-		terrainManager.updateLogic();
-		particleSystem.updateLogic();
-		entityManager.updateLogic();
-		playerInventory.updateLogic();
-
-		novelGameSystem.updateLogic();
-
 		// Manage keys and game/player controls
 		// Mouse controls
 		if (!imgui::GetIO().WantCaptureMouse && logicIO.hasFocus && (logicIO.mouseState[Mouse::Left] == LogicIO::JustPressed))
@@ -363,11 +359,18 @@ void TestScene::updateLogic(RenderWindow & win) {
 		if (!imgui::GetIO().WantCaptureKeyboard && logicIO.hasFocus &&
 			Keyboard::isKeyPressed(Keyboard::Space))
 			localPlayer->jump();
+
+		terrainManager.updateLogic();
+		particleSystem.updateLogic();
+		entityManager.updateLogic();
+		playerInventory.updateLogic();
+		novelGameSystem.updateLogic();
 	}
 	else // Excilpty handle the Escape key to support escaping from pause screen using Esc key
 		handleKeyState(logicIO.keyboardState[Keyboard::Escape], Keyboard::isKeyPressed(Keyboard::Escape));
 
 	uiManager.updateLogic();
+
 	if (logicIO.keyboardState[Keyboard::E] == LogicIO::JustPressed && !imgui::GetIO().WantCaptureKeyboard && logicIO.hasFocus)
 		uiManager.changeUI(make_shared<PlayerInventoryUI>());
 	if (logicIO.keyboardState[Keyboard::Escape] == LogicIO::JustPressed && !imgui::GetIO().WantCaptureKeyboard && logicIO.hasFocus)
@@ -422,7 +425,7 @@ void TestScene::runImGui() {
 		imgui::Text(u8"Innovation In China 中国智造，惠及全球 1234567890");
 		static char langFile[128] = { "lang-zh-Hans.list" };
 		if (imgui::InputText("Language File", langFile, sizeof(langFile), ImGuiInputTextFlags_EnterReturnsTrue))
-			text.loadFromFile(langFile);
+			texts.loadFromFile(langFile);
 		static float value = renderIO.gameScaleFactor;
 		imgui::SliderFloat("GameScaleFactor", &value, 16, 64);
 		renderIO.gameScaleFactor = value;
@@ -454,8 +457,9 @@ void TestScene::runImGui() {
 			imgui::PopStyleColor();
 		};
 
-		imgui::Text("%s %s / Version %d.%d.%d %s / Compile Time %s",
-			projectCode.c_str(), projectSuffix.c_str(), majorVersion, minorVersion, patchVersion, releaseStage.c_str(), compileTime.c_str());
+		imgui::Text("%s %s / Version %d.%d.%d %s / Compile Time %s / SFML %d.%d.%d / Dear ImGui %s",
+					projectCode.c_str(), projectSuffix.c_str(), majorVersion, minorVersion, patchVersion, releaseStage.c_str(), compileTime.c_str(),
+					SFML_VERSION_MAJOR, SFML_VERSION_MINOR, SFML_VERSION_PATCH, imgui::GetVersion());
 #ifdef USE_ASYNC_RENDERING
 		imgui::Text("State: Async-Rendering, TPS: %d, EPS: %d, FPS: %d", logicTickPerSecond, eventTickPerSecond, framePerSecond);
 #else

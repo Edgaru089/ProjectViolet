@@ -58,7 +58,7 @@ public:
 private:
 
 	ImFont * font;
-	unordered_map<string, NovelGameParagraph> paragraphs;
+	map<string, NovelGameParagraph> paragraphs;
 	NovelGameParagraph* current;
 
 };

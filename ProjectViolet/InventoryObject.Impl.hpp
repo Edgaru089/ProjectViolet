@@ -16,6 +16,14 @@ void InventoryObject::dropAllItems(Dataset& dataset, Vector2d centerPos) {
 			int& count = dataset[prefix + "count"].getDataInt();
 			if (name.empty() || count <= 0)
 				continue;
+
+			// HACK Send Right-Released signal to item for stopping guns from shooting when picked up again
+			if (Mouse::isButtonPressed(Mouse::Right)) {         // "item_"
+				shared_ptr<Item> item = itemAllocator.allocate(name.substr(5), dataset, prefix, false);
+				if (item != nullptr)
+					item->_onRightReleased();
+			}
+
 			shared_ptr<ItemEntity> e = make_shared<ItemEntity>(name);
 			for (auto& i : dataset.getDatasets())
 				if (i.first.substr(0, prefix.size()) == prefix)

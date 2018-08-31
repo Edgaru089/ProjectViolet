@@ -33,7 +33,7 @@ public:
 
 
 // Map all pointers to scenes to this std::map
-unordered_map<string, Scene*> sceneMapper;
+map<string, Scene*> sceneMapper;
 Scene* currentScene, *switchingScene;
 
 

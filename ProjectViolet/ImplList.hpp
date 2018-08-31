@@ -26,6 +26,7 @@
 #include "LaserBullet.Impl.hpp"
 #include "MapEditorScene.Impl.hpp"
 #include "Mob.Impl.hpp"
+#include "MobPathFinder.Impl.hpp"
 #include "MRM36.Impl.hpp"
 #include "NovelGameSystem.Impl.hpp"
 #include "ParticleSystem.Impl.hpp"

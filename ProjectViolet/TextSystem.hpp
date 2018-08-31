@@ -20,8 +20,8 @@ public:
 		mlog << "[TextSystem] Loading langfile:" << filename << dlog;
 		ifstream fin(filename);
 		if (!fin.good()) {
-			return false;
 			mlog << Log::Error << "[TextSystem] File Open Failed!" << dlog;
+			return false;
 		}
 
 		// UTF-8 Signature (EF BB BF)
@@ -41,6 +41,35 @@ public:
 			langs.insert(make_pair(id, StringParser::replaceSubString(cont, { { "\\n", "\n" } })));
 		}
 
+		return true;
+	}
+
+	bool loadFromMemory(const void* data, Uint64 size) {
+		if (data == nullptr || size == 0) {
+			mlog << Log::Error << "[TextSystem] Memory Access Failed!" << dlog;
+			return false;
+		}
+		string datastr((char*)data, size);
+		istringstream is(datastr);
+		if (!is.good()) {
+			mlog << Log::Error << "[TextSystem] Memory StringStream Open Failed!" << dlog;
+			return false;
+		}
+		// UTF-8 Signature (EF BB BF)
+		if (is.get() == 0xEF)
+			is.ignore(2);
+		else
+			is.unget();
+		string str;
+		langs.clear();
+		while (!getline(is, str).eof()) {
+			size_t pos;
+			if (str.size() == 0 || str[0] == '#' || (pos = str.find('=')) == string::npos)
+				continue;
+			string id = str.substr(0, pos), cont = str.substr(pos + 1);
+			//mlog << "             Loaded object: " << id << " = " << cont << dlog;
+			langs.insert(make_pair(id, StringParser::replaceSubString(cont, { { "\\n", "\n" } })));
+		}
 		return true;
 	}
 
@@ -73,9 +102,9 @@ public:
 
 private:
 	// Id - TextUtf8
-	unordered_map<string, string> langs;
+	map<string, string> langs;
 	string empty;
 
 };
 
-TextSystem text;
+TextSystem texts;

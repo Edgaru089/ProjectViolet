@@ -28,7 +28,7 @@ public:
 
 	shared_ptr<Entity> getEntity(Uuid id);
 
-	unordered_map<Uuid, shared_ptr<Entity>, UuidHasher>& getEntityMapList() { return entities; }
+	map<Uuid, shared_ptr<Entity>>& getEntityMapList() { return entities; }
 
 public:
 
@@ -39,7 +39,7 @@ private:
 
 	friend class WorldFileHandler;
 
-	unordered_map<Uuid, shared_ptr<Entity>, UuidHasher> entities;
+	map<Uuid, shared_ptr<Entity>> entities;
 
 };
 

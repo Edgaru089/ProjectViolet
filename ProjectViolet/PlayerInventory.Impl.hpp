@@ -89,7 +89,7 @@ void PlayerInventory::runImGui() {
 
 	const string& name = localPlayer->getDataset()["0" + to_string(cursorId) + "item_name"].getDataString();
 	if (name != "") {
-		imgui::Text(text.get(name + ".name"));
+		imgui::Text(texts.get(name + ".name"));
 		shared_ptr<Item> item = itemAllocator.allocate(name.substr(5), localPlayer->getDataset(), "0" + to_string(cursorId), true);
 		if (item != nullptr)
 			item->_pushExtraImguiItemsToDashboard();

@@ -10,7 +10,7 @@ public:
 	void initalaize();
 	shared_ptr<Block> allocate(string id);
 public:
-	unordered_map<string, function<shared_ptr<Block>(void)>> allocs;
+	map<string, function<shared_ptr<Block>(void)>> allocs;
 };
 
 BlockAllocator blockAllocator;

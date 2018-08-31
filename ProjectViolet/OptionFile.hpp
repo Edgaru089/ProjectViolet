@@ -78,7 +78,7 @@ private:
 	ofstream fout;
 
 	vector<string> fileLines;
-	unordered_map<string, Option> options;
+	map<string, Option> options;
 
 };
 

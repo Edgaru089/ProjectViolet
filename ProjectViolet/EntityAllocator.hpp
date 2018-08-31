@@ -9,7 +9,7 @@ public:
 	void initalaize();
 	shared_ptr<Entity> allocate(string id);
 public:
-	unordered_map<string, function<shared_ptr<Entity>(void)>> allocs;
+	map<string, function<shared_ptr<Entity>(void)>> allocs;
 };
 
 EntityAllocator entityAllocator;

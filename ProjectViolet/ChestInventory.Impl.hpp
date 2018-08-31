@@ -8,7 +8,7 @@
 
 ////////////////////////////////////////
 string ChestInventory::windowTitle() {
-	return text.getstr("block_chest.name");
+	return texts.getstr("block_chest.name");
 }
 
 

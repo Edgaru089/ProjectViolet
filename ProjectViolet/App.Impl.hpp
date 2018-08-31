@@ -31,7 +31,7 @@ void App::initalaizePreWindow() {
 
 	currentScene = sceneMapper["MapEditorScene"];
 
-	text.loadFromFile("lang.list");
+	assetManager.getAssetData("lang_en_US").load(texts);
 
 	hasLog = false;
 }

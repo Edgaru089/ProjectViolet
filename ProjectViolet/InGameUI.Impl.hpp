@@ -226,15 +226,15 @@ void PlayerInventoryUI::ImGuiInventorySlot(Dataset& dataset, int i, int j, int e
 				}
 			}
 			imgui::BeginTooltip();
-			imgui::TextUnformatted(text.get(slotName + ".name"));
-			const string& desc = text.getstr(slotName + ".desc");
+			imgui::TextUnformatted(texts.get(slotName + ".name"));
+			const string& desc = texts.getstr(slotName + ".desc");
 			if (desc != "") {
 				imgui::PushStyleColor(ImGuiCol_Text, Color(220, 220, 220));
 				imgui::TextUnformatted(desc.c_str());
 				imgui::PopStyleColor();
 			}
 			imgui::PushStyleColor(ImGuiCol_Text, imgui::GetStyleColorVec4(ImGuiCol_TextDisabled));
-			imgui::Text(text.get("inventory.maxcount"), maxItemsThisSlot);
+			imgui::Text(texts.get("inventory.maxcount"), maxItemsThisSlot);
 			imgui::PopStyleColor();
 			imgui::EndTooltip();
 		}

@@ -180,6 +180,7 @@ int main(int argc, char* argv[]) {
 
 	mlog << Log::Info << "[Main] Post-Initalaizing..." << dlog;
 
+	imgui::GetIO().ImeWindowHandle = win.getSystemHandle();
 	isReady = true;
 	app->initalaizePostWindow(win);
 

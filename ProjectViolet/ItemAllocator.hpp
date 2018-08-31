@@ -11,7 +11,7 @@ public:
 	void initalaize();
 	shared_ptr<Item> allocate(string id, Dataset& slot, string slotDataIdPrefix, bool hasFocus = false);
 public:
-	unordered_map<string, function<shared_ptr<Item>(Dataset&, string)>> allocs;
+	map<string, function<shared_ptr<Item>(Dataset&, string)>> allocs;
 };
 
 ItemAllocator itemAllocator;

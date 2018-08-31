@@ -122,11 +122,7 @@ public:
 
 private:
 
-#ifdef DATASET_USE_MAP_INSTED_OF_UNORDERED_MAP
 	map<string, Data> datasets;
-#else
-	unordered_map<string, Data> datasets;
-#endif
 };
 
 Packet& operator << (Packet& packet, Dataset& datas) {

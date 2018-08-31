@@ -85,6 +85,9 @@
     <Filter Include="Game\Blocks&amp;Entities&amp;Items\Items\Items\Guns\Modern">
       <UniqueIdentifier>{1236e03e-208a-44c1-b59f-4c511e7b4c42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\MobController">
+      <UniqueIdentifier>{783dd178-4ee1-4f5b-94cb-0372ad83e518}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImGui\imconfig.h">
@@ -437,6 +440,12 @@
     </ClInclude>
     <ClInclude Include="InventoryObject.Impl.hpp">
       <Filter>Game\Blocks&amp;Entities&amp;Items</Filter>
+    </ClInclude>
+    <ClInclude Include="MobPathFinder.hpp">
+      <Filter>Game\MobController</Filter>
+    </ClInclude>
+    <ClInclude Include="MobPathFinder.Impl.hpp">
+      <Filter>Game\MobController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

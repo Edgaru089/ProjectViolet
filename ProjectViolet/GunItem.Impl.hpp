@@ -60,7 +60,7 @@ void GunItem::updateLogic() {
 ////////////////////////////////////////
 void GunItem::_pushExtraImguiItemsToDashboard() {
 	if (isReloading()) {
-		imgui::Text(text.get("gunhud.reloading"),
+		imgui::Text(texts.get("gunhud.reloading"),
 			reloadedTimeMill() * 100 / reloadTime().asMilliseconds());
 		imgui::PushStyleColor(ImGuiCol_PlotHistogram, Color(240, 240, 240));
 		imgui::ProgressBar((float)(reloadedTimeMill()) / reloadTime().asMilliseconds(),
@@ -68,7 +68,7 @@ void GunItem::_pushExtraImguiItemsToDashboard() {
 		imgui::PopStyleColor();
 	}
 	else {
-		imgui::Text(text.get("gunhud.ammo"), roundsLeft(), roundsPerMagazine());
+		imgui::Text(texts.get("gunhud.ammo"), roundsLeft(), roundsPerMagazine());
 		imgui::PushStyleColor(ImGuiCol_PlotHistogram, Color(240 - 240 * (float)roundsLeft() / roundsPerMagazine(),
 															0,
 															240 * (float)roundsLeft() / roundsPerMagazine()));

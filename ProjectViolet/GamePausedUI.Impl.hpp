@@ -6,7 +6,7 @@
 
 ////////////////////////////////////////
 string GamePausedUI::windowTitle() {
-	return text.getstr("menu.paused");
+	return texts.getstr("menu.paused");
 }
 
 
@@ -26,11 +26,11 @@ void GamePausedUI::runImGui() {
 		imgui::PushStyleColor(ImGuiCol_ButtonActive, Color(48, 48, 48, 192));
 		imgui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
 		imgui::Dummy(ImVec2(.0f, 5.0f));
-		if (imgui::Button(text.get("menu.resume"), ImVec2(300, 36)))
+		if (imgui::Button(texts.get("menu.resume"), ImVec2(300, 36)))
 			uiManager.changeUI(nullptr);
-		if (imgui::Button(text.get("menu.options"), ImVec2(300, 36)))
+		if (imgui::Button(texts.get("menu.options"), ImVec2(300, 36)))
 			; // TODO Options
-		if (imgui::Button(text.get("menu.backtotitle"), ImVec2(300, 36)))
+		if (imgui::Button(texts.get("menu.backtotitle"), ImVec2(300, 36)))
 			; // TODO Title Screen
 		if (imgui::Button("Jump to MapEditorScene", ImVec2(300, 36)))
 			app->switchScene("MapEditorScene");

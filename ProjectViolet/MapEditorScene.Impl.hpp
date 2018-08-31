@@ -5,6 +5,7 @@
 #include "WorldFileHandler.hpp"
 #include "AssetManager.hpp"
 #include "TextureManager.hpp"
+#include "MobPathFinder.hpp"
 
 
 ////////////////////////////////////////
@@ -103,19 +104,57 @@ void MapEditorScene::onRender(RenderWindow& win) {
 		win.draw(renderRect(b->getHitbox()*renderIO.gameScaleFactor, Color(255, 255, 255, 128)));
 
 	win.setView(View(FloatRect(Vector2f(0, 0), Vector2f(logicIO.renderSize))));
-	if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Left] == LogicIO::Pressed)
+	if (logicIO.hasFocus && !imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Left] == LogicIO::Pressed)
 		win.draw(renderRect(DoubleRect(min(mousePosBeforePress.x, Mouse::getPosition(win).x), min(mousePosBeforePress.y, Mouse::getPosition(win).y),
 									   abs(mousePosBeforePress.x - Mouse::getPosition(win).x), abs(mousePosBeforePress.y - Mouse::getPosition(win).y)),
 							Color(255, 255, 255, 192)));
+
+	if (findPathBeginPos != Vector2i(-1, -1)) {
+		Vector2d center = Vector2d(findPathBeginPos.x + 0.5, findPathBeginPos.y + 0.5)*renderIO.gameScaleFactor + renderIO.gameScenePosOffset;
+		double width = renderIO.gameScaleFactor;
+		VertexArray verts;
+		verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y - width / 2.0), Color::Green));
+		verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y - width / 2.0), Color::Green));
+		verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y + width / 2.0), Color::Green));
+		verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y + width / 2.0), Color::Green));
+		verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y - width / 2.0), Color::Green));
+		verts.setPrimitiveType(PrimitiveType::LinesStrip);
+		win.draw(verts);
+	}
+	if (findPathEndPos != Vector2i(-1, -1)) {
+		Vector2d center = Vector2d(findPathEndPos.x + 0.5, findPathEndPos.y + 0.5)*renderIO.gameScaleFactor + renderIO.gameScenePosOffset;
+		double width = renderIO.gameScaleFactor;
+		VertexArray verts;
+		verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y - width / 2.0), Color::Yellow));
+		verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y - width / 2.0), Color::Yellow));
+		verts.append(Vertex(Vector2f(center.x + width / 2.0, center.y + width / 2.0), Color::Yellow));
+		verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y + width / 2.0), Color::Yellow));
+		verts.append(Vertex(Vector2f(center.x - width / 2.0, center.y - width / 2.0), Color::Yellow));
+		verts.setPrimitiveType(PrimitiveType::LinesStrip);
+		win.draw(verts);
+	}
+	if (path.actions.size() > 0) {
+		Vector2d center = Vector2d(findPathBeginPos.x + 0.5, findPathBeginPos.y + 0.5)*renderIO.gameScaleFactor + renderIO.gameScenePosOffset;
+		double width = renderIO.gameScaleFactor;
+		Vector2d offsets[] = { Vector2d(1, 0), Vector2d(-1, 0), Vector2d(0, -1), Vector2d(0, 1), Vector2d(0, -1), Vector2d(0, 1) };
+		VertexArray verts;
+		verts.append(Vertex(Vector2f(center), Color::White));
+		for (auto i : path.actions) {
+			center += offsets[i] * renderIO.gameScaleFactor;
+			verts.append(Vertex(Vector2f(center), Color::White));
+		}
+		verts.setPrimitiveType(PrimitiveType::LineStrip);
+		win.draw(verts);
+	}
 }
 
 
 ////////////////////////////////////////
 void MapEditorScene::updateLogic(RenderWindow& win) {
 
-	if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Left] == LogicIO::JustPressed)
+	if (logicIO.hasFocus && !imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Left] == LogicIO::JustPressed)
 		mousePosBeforePress = Mouse::getPosition(win);
-	if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Left] == LogicIO::JustReleased) {
+	if (logicIO.hasFocus && !imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Left] == LogicIO::JustReleased) {
 		Vector2d lastpos = TerrainManager::convertScreenPixelToWorldCoord(mousePosBeforePress),
 			curpos = TerrainManager::convertScreenPixelToWorldCoord(Mouse::getPosition(win));
 		DoubleRect rect(min(lastpos.x, curpos.x), min(lastpos.y, curpos.y), abs(lastpos.x - curpos.x), abs(lastpos.y - curpos.y));
@@ -129,9 +168,9 @@ void MapEditorScene::updateLogic(RenderWindow& win) {
 			else
 				selectedBlock = Vector2i(-1, -1);
 	}
-	if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Middle] == LogicIO::JustPressed)
+	if (logicIO.hasFocus && !imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Middle] == LogicIO::JustPressed)
 		mousePosBeforePress = Mouse::getPosition(win);
-	if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Middle] == LogicIO::Pressed) {
+	if (logicIO.hasFocus && !imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Middle] == LogicIO::Pressed) {
 		renderIO.gameScenePosOffset += Vector2d(Mouse::getPosition(win) - mousePosBeforePress);
 		mousePosBeforePress = Mouse::getPosition(win);
 	}
@@ -151,7 +190,7 @@ void MapEditorScene::updateLogic(RenderWindow& win) {
 	//	mousePosBeforePress = logicIO.mousePos;
 	//}
 
-	if (!imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Right] == LogicIO::JustReleased) {
+	if (logicIO.hasFocus && !imgui::GetIO().WantCaptureMouse&&logicIO.mouseState[Mouse::Right] == LogicIO::JustReleased) {
 		if (insertingEntity) {
 			auto p = entityAllocator.allocate(insertId);
 			if (p != nullptr) {
@@ -165,7 +204,7 @@ void MapEditorScene::updateLogic(RenderWindow& win) {
 		}
 	}
 
-	if (!imgui::GetIO().WantCaptureKeyboard&&logicIO.keyboardState[Keyboard::Delete] == LogicIO::JustReleased) {
+	if (logicIO.hasFocus && !imgui::GetIO().WantCaptureKeyboard&&logicIO.keyboardState[Keyboard::Delete] == LogicIO::JustReleased) {
 		for (auto& i : selectedEntities)
 			entityManager.getEntityMapList().erase(i);
 		selectedEntities.clear();
@@ -241,7 +280,7 @@ void MapEditorScene::runImGui() {
 		imgui::PopItemFlag();
 		pushBoolText(!logicPaused, "RUNNING", "PAUSED");
 		imgui::Separator();
-		static float dummy = 48.0f;
+		static float dummy = renderIO.gameScaleFactor;
 		imgui::PushItemWidth(200);
 		imgui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 		imgui::MenuItem("Render Terrain", nullptr, &renderTerrain);
@@ -489,15 +528,15 @@ void MapEditorScene::runImGui() {
 						}
 						if (!contextMenuOpen&&info.id != "none") {
 							imgui::BeginTooltip();
-							imgui::TextUnformatted(text.get(slotName + ".name"));
-							const string& desc = text.getstr(slotName + ".desc");
+							imgui::TextUnformatted(texts.get(slotName + ".name"));
+							const string& desc = texts.getstr(slotName + ".desc");
 							if (desc != "") {
 								imgui::PushStyleColor(ImGuiCol_Text, Color(220, 220, 220));
 								imgui::TextUnformatted(desc.c_str());
 								imgui::PopStyleColor();
 							}
 							imgui::PushStyleColor(ImGuiCol_Text, imgui::GetStyleColorVec4(ImGuiCol_TextDisabled));
-							imgui::Text(text.get("inventory.maxcount"), maxItemsThisSlot);
+							imgui::Text(texts.get("inventory.maxcount"), maxItemsThisSlot);
 							imgui::PopStyleColor();
 							imgui::EndTooltip();
 						}
@@ -597,6 +636,36 @@ void MapEditorScene::runImGui() {
 
 			contextMenuOpen = thisFrameHasContextMenu;
 		}
+	}
+	imgui::End();
+
+	if (imgui::Begin("Test MobPathFinder Functions", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float hitboxSize[2] = { 0.8, 1.6 };
+		static bool climbLadders = true;
+		static int steps = 100;
+		if (imgui::Selectable("Begin Position", false))
+			findPathBeginPos = selectedBlock;
+		imgui::SameLine();
+		imgui::Text("(%d, %d)", findPathBeginPos.x, findPathBeginPos.y);
+		if (imgui::Selectable("End Position", false))
+			findPathEndPos = selectedBlock;
+		imgui::SameLine();
+		imgui::Text("(%d, %d)", findPathEndPos.x, findPathEndPos.y);
+		imgui::InputFloat2("Hitbox Size", hitboxSize, 3);
+		imgui::Selectable("Climb Ladders", &climbLadders);
+		pushBoolText(climbLadders);
+		imgui::InputInt("Max Steps", &steps);
+		if (imgui::Button("Run!", ImVec2(-1, 0)))
+			path = MobPathFinder::findPath(findPathBeginPos, findPathEndPos, Vector2d(hitboxSize[0], hitboxSize[1]), climbLadders, steps);
+		imgui::Separator();
+		imgui::Text("Step Count: %d", path.actions.size());
+		char* strings[] = { "MoveRight\n", "MoveLeft\n", "Jump\n", "Fall\n", "AscendLadder\n", "DescendLadder\n" };
+		string total;
+		for (auto i : path.actions)
+			total += strings[i];
+		if (total.size() > 0)
+			total.pop_back();
+		imgui::Text(total.c_str());
 	}
 	imgui::End();
 }
