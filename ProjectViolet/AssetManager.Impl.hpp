@@ -13,14 +13,24 @@ bool AssetManager::loadAssetPack(string filename) {
 		return false;
 	}
 
+	char c = fin.get();
+	if (c == 'E') { // File header "Edgaru089 Package! 0=w=0"
+		mlog << "[AssetManager] Edgaru089 Package! 0=w=0" << dlog;
+		fin.ignore(23);
+	}
+	else
+		fin.unget();
+
 	Uint64 listSize = 0;
 	for (int i = 0; i < 8; i++) {
 		Uint8 c = fin.get();
 		listSize |= (c << (i * 8));
 	}
 	mlog << "[AssetManager] Reading asset list with a size of " << listSize << "..." << dlog;
-	string listStr(listSize, '\0');
-	fin.read(listStr.data(), listSize);
+	string listStr;
+	listStr.reserve(listSize);
+	for (int i = 0; i < listSize; i++)
+		listStr.push_back(fin.get());
 
 	istringstream strin(listStr);
 	string str;
@@ -121,7 +131,7 @@ bool AssetManager::loadAssetPack(string filename) {
 					i++;
 				}
 				rect = IntRect(StringParser::toInt(left), StringParser::toInt(top),
-							   StringParser::toInt(width), StringParser::toInt(height));
+					StringParser::toInt(width), StringParser::toInt(height));
 			}
 
 			mlog << "[AssetManager] Loaded asset " << id << dlog;
@@ -155,8 +165,8 @@ bool AssetManager::loadAssetPack(string filename) {
 			mlog << "[AssetManager] SHA-256 digest test passed." << dlog;
 		else {
 			mlog << Log::FatalError << "[AssetManager] SHA-256 digest test failed!" << dlog;
-			mlog << Log::FatalError << "[AssetManager] Saved Digest: " << sha256Digest << dlog;
-			mlog << Log::FatalError << "[AssetManager]  Real Digest: " << realDigest << dlog;
+			mlog << Log::FatalError << "[AssetManager]  Saved Digest: " << sha256Digest << dlog;
+			mlog << Log::FatalError << "[AssetManager] Actual Digest: " << realDigest << dlog;
 			mlog << Log::FatalError << "[AssetManager] Your data pack might be modified! Aborting!" << dlog;
 			throw runtime_error("AssetManager: Data pack SHA-256 digest failed");
 		}

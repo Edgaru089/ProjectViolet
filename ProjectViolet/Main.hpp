@@ -88,6 +88,7 @@ mt19937 randomEngine((random_device())());
 Clock desktopUpdate;
 
 //Utilities
+const String operator""S(const char* c, std::size_t l) { return String::fromUtf8(c, c + l); }
 String u8ToSfString(string u8string) { return String::fromUtf8(u8string.begin(), u8string.end()); }
 String u8ToSfString(char* u8string) { return String::fromUtf8(u8string, u8string + strlen(u8string)); }
 

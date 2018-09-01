@@ -279,9 +279,6 @@
     <ClInclude Include="RpgEntity.Impl.hpp">
       <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="TextSystem.hpp">
-      <Filter>Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="LaserBullet.hpp">
       <Filter>Game\Blocks&amp;Entities&amp;Items\Entities\Entities</Filter>
     </ClInclude>
@@ -446,6 +443,9 @@
     </ClInclude>
     <ClInclude Include="MobPathFinder.Impl.hpp">
       <Filter>Game\MobController</Filter>
+    </ClInclude>
+    <ClInclude Include="TextSystem.hpp">
+      <Filter>Game\Asset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
