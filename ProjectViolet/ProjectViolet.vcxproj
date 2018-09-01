@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{EEFA84EE-85FE-484B-BDD4-0B943E9E5A54}</ProjectGuid>
+    <ProjectGuid>{97AE09A7-0D91-4200-A383-6589F8E3ED8C}</ProjectGuid>
     <RootNamespace>ProjectMajestic</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -295,6 +295,7 @@
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
+    <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClInclude Include="TerrainManager.Impl.hpp" />
     <ClInclude Include="TestScene.Impl.hpp" />

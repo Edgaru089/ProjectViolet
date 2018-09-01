@@ -40,7 +40,7 @@ void InGameUIManager::runImGui() {
 	if (curUI == nullptr)
 		return;
 
-	imgui::PushStyleColor(ImGuiCol_ModalWindowDarkening, Color(0, 0, 0, 128));
+	imgui::PushStyleColor(ImGuiCol_ModalWindowDimBg, Color(0, 0, 0, 128));
 	imgui::PushStyleColor(ImGuiCol_Button, Color::Transparent);
 	imgui::PushStyleColor(ImGuiCol_ButtonHovered, Color(255, 255, 255, 64));
 	imgui::PushStyleColor(ImGuiCol_ButtonActive, Color(255, 255, 255, 48));
@@ -49,7 +49,7 @@ void InGameUIManager::runImGui() {
 	imgui::PushStyleColor(ImGuiCol_TitleBgActive, imgui::GetStyleColorVec4(ImGuiCol_PopupBg));
 	imgui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.0f);
 	imgui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-	GImGui->ModalWindowDarkeningRatio = 1.0f;
+	GImGui->DimBgRatio = 1.0f;
 	ImGui::OpenPopup(curUI->windowTitle().c_str());
 
 	if (!curUI->showInventory())
@@ -72,11 +72,11 @@ void InGameUIManager::runImGui() {
 			if (info.vaild) {
 				ImVec2 pos = imgui::GetIO().MousePos;
 				imgui::GetOverlayDrawList()->AddImage((ImTextureID)info.texture->getNativeHandle(),
-					ImVec2(pos.x - 16, pos.y - 16), ImVec2(pos.x + 16, pos.y + 16),
-					ImVec2(info.textureRect.left / (float)info.texture->getSize().x,
-						   info.textureRect.top / (float)info.texture->getSize().y),
-					ImVec2((info.textureRect.left + info.textureRect.width) / (float)info.texture->getSize().x, (
-						info.textureRect.top + info.textureRect.height) / (float)info.texture->getSize().y));
+													  ImVec2(pos.x - 16, pos.y - 16), ImVec2(pos.x + 16, pos.y + 16),
+													  ImVec2(info.textureRect.left / (float)info.texture->getSize().x,
+															 info.textureRect.top / (float)info.texture->getSize().y),
+													  ImVec2((info.textureRect.left + info.textureRect.width) / (float)info.texture->getSize().x, (
+														  info.textureRect.top + info.textureRect.height) / (float)info.texture->getSize().y));
 				pos.x -= 16 + 3 - 2; pos.y -= 16 + 3;
 				if (localPlayer->getDataset()["cursor_count"].getDataInt() != 1)
 					imgui::GetOverlayDrawList()->AddText(pos, ImU32(0xFFFFFFFF), StringParser::toString(localPlayer->getDataset()["cursor_count"].getDataInt()).c_str());

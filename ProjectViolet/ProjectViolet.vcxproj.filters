@@ -464,5 +464,8 @@
     <ClCompile Include="Main.cpp">
       <Filter>源代码文件</Filter>
     </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>源代码文件\ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
